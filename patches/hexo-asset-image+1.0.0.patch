@@ -1,0 +1,13 @@
+diff --git a/node_modules/hexo-asset-image/index.js b/node_modules/hexo-asset-image/index.js
+index d651afa..1bba125 100644
+--- a/node_modules/hexo-asset-image/index.js
++++ b/node_modules/hexo-asset-image/index.js
+@@ -21,7 +21,7 @@ hexo.extend.filter.register('after_post_render', function(data){
+       var endPos = link.lastIndexOf('/');
+     }
+     else {
+-      var endPos = link.lastIndexOf('.');
++      var endPos = link.length-1;
+     }
+     link = link.substring(beginPos, endPos) + '/' + appendLink;
+ 
