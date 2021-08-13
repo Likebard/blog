@@ -1,4 +1,8 @@
-# React源码
+---
+title: react源码总结
+date: 2021-03-13 10:36:36
+tags: react
+---
 
 ## Reconciler:
 每当更新发生时， __Reconciler__ 会做如下工作：
@@ -14,7 +18,7 @@ React支持跨平台，不同的平台有不同的 __Renderer__，以下：
 * ReactTest
 * ReactArt
 每次更新发生时，Renderer接到Reconciler通知，将变化的组件渲染在当前宿主环境。
-
+<!--more-->
 ## React15架构-->React16架构
 1. 在React15中：
 * 每个组件更新都会通过Reconciler和Renderer,他们是交替工作的。

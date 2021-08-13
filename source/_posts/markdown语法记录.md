@@ -1,7 +1,7 @@
 ---
-title: first artical
-date: 2020-07-15 10:17:22
-tags:
+title: MarkDown语法记录
+date: 2019-07-15 10:17:22
+tags: 其他
 ---
 # 标题：
 ```
@@ -21,7 +21,7 @@ tags:
 
 # 这个标题有 2 个 classes {.class1 .class2}
 ```
-
+<!--more-->
 # 强调：
 *这会是 斜体 的文字*
 _这会是 斜体 的文字_

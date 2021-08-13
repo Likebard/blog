@@ -1,12 +1,17 @@
-# Hooks特性探究
+---
+title: react-hooks
+date: 2021-03-13 10:34:31
+tags: react
+---
 
 ## 与Class组件不同的心智模型
 
 ### 使用hooks组件，props和state、还有内部的函数，它们在每一次的render中都是彼此独立的。一次render中生成的props和state也仅属于这次特定的渲染
 
 考虑如下代码，它采用class写法:
-
-```import React from "react";
+<!--more-->
+```
+import React from "react";
 
 export default class ClassDiv extends React.Component {
     constructor(props) {

@@ -5,12 +5,10 @@
 # Site
 title: likebard's blog
 subtitle: ''
-description: ''
+description: '好记性不如烂笔头'
 keywords:
-author: LB
-language:
-- zh-tw
-- en
+author: Likebard
+language: zh-CN
 timezone: 'Asia/Shanghai'
 
 # URL

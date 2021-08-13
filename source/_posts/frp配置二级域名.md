@@ -1,12 +1,13 @@
 ---
 title: frp+Nginx配置二级域名(http/https)
 date: 2021-08-12 10:33:12
-tags:
+categories: DevOps
+tags: [frp, nginx]
 ---
 
 ## 预置环境：
 本地和公网服务器均安装好frpc+frps服务，公网服务器安装好Nginx。已有阿里云ECS和域名
-
+<!--more-->
 ## 一、 阿里云官网设置
 1. 主域名解析设置
 添加一条解析记录，主机记录填*,记录值填ECS的ip地址，其他项默认。这个操作会设置，当访问主域名下所有二级域名时，都会被DNS解析到指定的公网服务器上来。
