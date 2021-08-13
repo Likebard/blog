@@ -5,21 +5,24 @@
   
 
   
-  <title>frp配置二级域名 | likebard&#39;s blog</title>
+  <title>frp+Nginx配置二级域名(http/https) | likebard&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="frp+nginx配置二级域名代理内网应用预置环境：本地和公网服务器均配置好frp服务，公网服务器安装好Nginx。使用阿里云ECS和域名 一、 阿里云官网操作 主域名解析设置添加一条解析记录，主机记录填*,记录值填ECS的ip地址，其他项默认。这个操作会设置，当访问主域名下所有二级域名时，都会被DNS解析到指定的公网服务器上来。">
+  <meta name="description" content="预置环境：本地和公网服务器均安装好frpc+frps服务，公网服务器安装好Nginx。已有阿里云ECS和域名 一、 阿里云官网设置 主域名解析设置添加一条解析记录，主机记录填*,记录值填ECS的ip地址，其他项默认。这个操作会设置，当访问主域名下所有二级域名时，都会被DNS解析到指定的公网服务器上来。  申请免费证书，并绑定到想用到的二级域名上。   申请完成后下载证书到本地，并且scp上传到服务">
 <meta property="og:type" content="article">
-<meta property="og:title" content="frp配置二级域名">
+<meta property="og:title" content="frp+Nginx配置二级域名(http&#x2F;https)">
 <meta property="og:url" content="https://likebard.github.io/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/index.html">
 <meta property="og:site_name" content="likebard&#39;s blog">
-<meta property="og:description" content="frp+nginx配置二级域名代理内网应用预置环境：本地和公网服务器均配置好frp服务，公网服务器安装好Nginx。使用阿里云ECS和域名 一、 阿里云官网操作 主域名解析设置添加一条解析记录，主机记录填*,记录值填ECS的ip地址，其他项默认。这个操作会设置，当访问主域名下所有二级域名时，都会被DNS解析到指定的公网服务器上来。">
+<meta property="og:description" content="预置环境：本地和公网服务器均安装好frpc+frps服务，公网服务器安装好Nginx。已有阿里云ECS和域名 一、 阿里云官网设置 主域名解析设置添加一条解析记录，主机记录填*,记录值填ECS的ip地址，其他项默认。这个操作会设置，当访问主域名下所有二级域名时，都会被DNS解析到指定的公网服务器上来。  申请免费证书，并绑定到想用到的二级域名上。   申请完成后下载证书到本地，并且scp上传到服务">
 <meta property="og:locale" content="zh_TW">
-<meta property="og:image" content="https://likebard.github.io/.io//host.png">
+<meta property="og:image" content="https://likebard.github.io/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/host.png">
+<meta property="og:image" content="https://likebard.github.io/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/aplication_ssl.png">
+<meta property="og:image" content="https://likebard.github.io/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/frps_dashboard.png">
+<meta property="og:image" content="https://likebard.github.io/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/frpc_dashboard.png">
 <meta property="article:published_time" content="2021-08-12T02:33:12.000Z">
-<meta property="article:modified_time" content="2021-08-12T02:37:48.716Z">
+<meta property="article:modified_time" content="2021-08-12T06:02:51.297Z">
 <meta property="article:author" content="LB">
 <meta name="twitter:card" content="summary">
-<meta name="twitter:image" content="https://likebard.github.io/.io//host.png">
+<meta name="twitter:image" content="https://likebard.github.io/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/host.png">
   
     <link rel="alternate" href="/atom.xml" title="likebard&#39;s blog" type="application/atom+xml">
   
@@ -82,7 +85,7 @@
         
   
     <h1 class="article-title" itemprop="name">
-      frp配置二级域名
+      frp+Nginx配置二级域名(http/https)
     </h1>
   
 
@@ -90,10 +93,32 @@
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="frp-nginx配置二级域名代理内网应用"><a href="#frp-nginx配置二级域名代理内网应用" class="headerlink" title="frp+nginx配置二级域名代理内网应用"></a>frp+nginx配置二级域名代理内网应用</h1><h2 id="预置环境："><a href="#预置环境：" class="headerlink" title="预置环境："></a>预置环境：</h2><p>本地和公网服务器均配置好frp服务，公网服务器安装好Nginx。使用阿里云ECS和域名</p>
-<h2 id="一、-阿里云官网操作"><a href="#一、-阿里云官网操作" class="headerlink" title="一、 阿里云官网操作"></a>一、 阿里云官网操作</h2><ol>
-<li>主域名解析设置<br>添加一条解析记录，主机记录填*,记录值填ECS的ip地址，其他项默认。这个操作会设置，当访问主域名下所有二级域名时，都会被DNS解析到指定的公网服务器上来。<br><img src="/.io//host.png" alt="host"></li>
+        <h2 id="预置环境："><a href="#预置环境：" class="headerlink" title="预置环境："></a>预置环境：</h2><p>本地和公网服务器均安装好frpc+frps服务，公网服务器安装好Nginx。已有阿里云ECS和域名</p>
+<h2 id="一、-阿里云官网设置"><a href="#一、-阿里云官网设置" class="headerlink" title="一、 阿里云官网设置"></a>一、 阿里云官网设置</h2><ol>
+<li><p>主域名解析设置<br>添加一条解析记录，主机记录填*,记录值填ECS的ip地址，其他项默认。这个操作会设置，当访问主域名下所有二级域名时，都会被DNS解析到指定的公网服务器上来。<br><img src="/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/host.png" alt="阿里云域名解析截图"></p>
+</li>
+<li><p>申请免费证书，并绑定到想用到的二级域名上。<br><img src="/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/aplication_ssl.png" alt="申请ssl截图"></p>
+</li>
 </ol>
+<p>申请完成后下载证书到本地，并且scp上传到服务器一份。注意因为后续要用nginx，所以下载的证书选择Nginx类型。</p>
+<h2 id="二、-frp配置"><a href="#二、-frp配置" class="headerlink" title="二、 frp配置"></a>二、 frp配置</h2><ol>
+<li><p>远程服务器frps.ini,添加如下配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[common]</span><br><span class="line">vhost_http_port &#x3D; 4080      # frp监听Http请求的端口</span><br><span class="line">vhost_https_port &#x3D; 4443     # frp监听HTTPS请求的端口</span><br><span class="line">subdomain_host &#x3D; test.com   # 这里填你要配置的主域名</span><br></pre></td></tr></table></figure>
+<p>对于设置的4080和4443两个端口，不要忘记去阿里云ECS控制台的安全组里配置这两个端口，不然会被墙。</p>
+</li>
+<li><p>本地主机frpc.ini，添加如下配置</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[web]</span><br><span class="line">type &#x3D; http</span><br><span class="line">local_port &#x3D; 3000   # 端口号写你本地web应用的端口号</span><br><span class="line">subdomain &#x3D; xxx     # 这里写上你的子域名，到时候在浏览器可以输入xxx.test.com来访问你的内网应用</span><br><span class="line"></span><br><span class="line">[webs]</span><br><span class="line">type &#x3D; https</span><br><span class="line">local_port &#x3D; 3000</span><br><span class="line">subdomain &#x3D; xxx</span><br><span class="line"></span><br><span class="line">plugin &#x3D; https2http</span><br><span class="line">plugin_local_addr &#x3D; 127.0.0.1:3000</span><br><span class="line"></span><br><span class="line"># HTTPS证书相关的配置</span><br><span class="line">plugin_crt_path &#x3D; &#x2F;Users&#x2F;likebard&#x2F;program&#x2F;cert.pem  # 这里使用下载到本地的公钥路径</span><br><span class="line">plugin_key_path &#x3D; &#x2F;Users&#x2F;likebard&#x2F;program&#x2F;cert.key  # 下载到本地的私钥路径</span><br><span class="line">plugin_host_header_rewrite &#x3D; 127.0.0.1</span><br><span class="line">plugin_header_X-From-Where &#x3D; frp</span><br></pre></td></tr></table></figure>
+</li>
+<li><p>配置完成后，重启frpc服务，访问Client端和Server端的dashboard，如果看见的结果和以下截图一样，说明配置成功。<br><img src="/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/frps_dashboard.png" alt="frps管理界面"><br><img src="/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/frpc_dashboard.png" alt="frpc管理界面"></p>
+</li>
+</ol>
+<h2 id="三、-ESC上Nginx对二级域名做配置"><a href="#三、-ESC上Nginx对二级域名做配置" class="headerlink" title="三、 ESC上Nginx对二级域名做配置"></a>三、 ESC上Nginx对二级域名做配置</h2><p>针对http请求泛域名：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name *.test.com;     #这里可以使用泛二级域名，也可以像下面配置https那样，指定二级域名</span><br><span class="line">    location &#x2F; &#123;</span><br><span class="line">        proxy_pass http:&#x2F;&#x2F;127.0.0.1:4080;   # 这是要走80端口后要代理的端口，填上frps监听http请求的端口</span><br><span class="line">        proxy_set_header    Host            $host:80;</span><br><span class="line">        proxy_set_header    X-Real-IP       $remote_addr;</span><br><span class="line">        proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        proxy_hide_header   X-Powered-By;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+<p>针对https请求指定二级域名：</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">         listen 443 ssl http2;</span><br><span class="line">         server_name xxx.test.com; #填写绑定证书的域名</span><br><span class="line"></span><br><span class="line">         ssl_certificate cert&#x2F;cert.pem;</span><br><span class="line">         ssl_certificate_key cert&#x2F;cert.key;</span><br><span class="line">         ssl_session_timeout 5m;</span><br><span class="line">         ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4; #使用此加密套件。</span><br><span class="line">         ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3; #使用该协议进行配置。</span><br><span class="line">         ssl_prefer_server_ciphers on;</span><br><span class="line">         location &#x2F; &#123;</span><br><span class="line">             proxy_pass http:&#x2F;&#x2F;127.0.0.1:4080;</span><br><span class="line">             proxy_ssl_server_name on;</span><br><span class="line">             proxy_redirect off;</span><br><span class="line"></span><br><span class="line">             proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">             proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">             proxy_set_header Host $host;</span><br><span class="line">         &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
+
+<h2 id="最终"><a href="#最终" class="headerlink" title="最终"></a>最终</h2><p>重启nginx之后,打开Chrome，就能通过二级域名访问内网web应用了！由于Nginx里配置了proxy_pass代理，因此不需要带上端口号，可以直接访问应用。<br>我们来梳理一下整个工作流程： 访问https://***.test.com时，之前配置过的dns解析能确保请求到达指定的阿里云ECS上， ECS上的Nginx会根据配置的子域名，来判断应该使用哪一套ssl证书，并转发到ECS指定的端口上（在本文中是4080端口）。4080端口上有frps的监听服务,frps会根据请求的二级域名，去配置表中遍历所有挂载的二级域名，命中后就找到了内网服务器，利用NAT映射，最终访问到我们指定的内网web应用上。</p>
 
       
     </div>
@@ -147,7 +172,7 @@
       <ul>
         
           <li>
-            <a href="/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/">frp配置二级域名</a>
+            <a href="/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/">frp+Nginx配置二级域名(http/https)</a>
           </li>
         
           <li>
