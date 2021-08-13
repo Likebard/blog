@@ -7,12 +7,14 @@
   
   <title>likebard&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta property="og:type" content="website">
+  <meta name="description" content="好记性不如烂笔头">
+<meta property="og:type" content="website">
 <meta property="og:title" content="likebard&#39;s blog">
 <meta property="og:url" content="https://likebard.github.io/index.html">
 <meta property="og:site_name" content="likebard&#39;s blog">
-<meta property="og:locale" content="zh_TW">
-<meta property="article:author" content="LB">
+<meta property="og:description" content="好记性不如烂笔头">
+<meta property="og:locale" content="zh_CN">
+<meta property="article:author" content="Likebard">
 <meta name="twitter:card" content="summary">
   
     <link rel="alternate" href="/atom.xml" title="likebard&#39;s blog" type="application/atom+xml">
@@ -53,7 +55,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://likebard.github.io"></form>
@@ -70,6 +72,10 @@
   <time datetime="2021-08-12T02:33:12.000Z" itemprop="datePublished">2021-08-12</time>
 </a>
     
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/DevOps/">DevOps</a>
+  </div>
+
   </div>
   <div class="article-inner">
     
@@ -87,38 +93,19 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="预置环境："><a href="#预置环境：" class="headerlink" title="预置环境："></a>预置环境：</h2><p>本地和公网服务器均安装好frpc+frps服务，公网服务器安装好Nginx。已有阿里云ECS和域名</p>
-<h2 id="一、-阿里云官网设置"><a href="#一、-阿里云官网设置" class="headerlink" title="一、 阿里云官网设置"></a>一、 阿里云官网设置</h2><ol>
-<li><p>主域名解析设置<br>添加一条解析记录，主机记录填*,记录值填ECS的ip地址，其他项默认。这个操作会设置，当访问主域名下所有二级域名时，都会被DNS解析到指定的公网服务器上来。<br><img src="/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/host.png" alt="阿里云域名解析截图"></p>
-</li>
-<li><p>申请免费证书，并绑定到想用到的二级域名上。<br><img src="/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/aplication_ssl.png" alt="申请ssl截图"></p>
-</li>
-</ol>
-<p>申请完成后下载证书到本地，并且scp上传到服务器一份。注意因为后续要用nginx，所以下载的证书选择Nginx类型。</p>
-<h2 id="二、-frp配置"><a href="#二、-frp配置" class="headerlink" title="二、 frp配置"></a>二、 frp配置</h2><ol>
-<li><p>远程服务器frps.ini,添加如下配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[common]</span><br><span class="line">vhost_http_port &#x3D; 4080      # frp监听Http请求的端口</span><br><span class="line">vhost_https_port &#x3D; 4443     # frp监听HTTPS请求的端口</span><br><span class="line">subdomain_host &#x3D; test.com   # 这里填你要配置的主域名</span><br></pre></td></tr></table></figure>
-<p>对于设置的4080和4443两个端口，不要忘记去阿里云ECS控制台的安全组里配置这两个端口，不然会被墙。</p>
-</li>
-<li><p>本地主机frpc.ini，添加如下配置</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[web]</span><br><span class="line">type &#x3D; http</span><br><span class="line">local_port &#x3D; 3000   # 端口号写你本地web应用的端口号</span><br><span class="line">subdomain &#x3D; xxx     # 这里写上你的子域名，到时候在浏览器可以输入xxx.test.com来访问你的内网应用</span><br><span class="line"></span><br><span class="line">[webs]</span><br><span class="line">type &#x3D; https</span><br><span class="line">local_port &#x3D; 3000</span><br><span class="line">subdomain &#x3D; xxx</span><br><span class="line"></span><br><span class="line">plugin &#x3D; https2http</span><br><span class="line">plugin_local_addr &#x3D; 127.0.0.1:3000</span><br><span class="line"></span><br><span class="line"># HTTPS证书相关的配置</span><br><span class="line">plugin_crt_path &#x3D; &#x2F;Users&#x2F;likebard&#x2F;program&#x2F;cert.pem  # 这里使用下载到本地的公钥路径</span><br><span class="line">plugin_key_path &#x3D; &#x2F;Users&#x2F;likebard&#x2F;program&#x2F;cert.key  # 下载到本地的私钥路径</span><br><span class="line">plugin_host_header_rewrite &#x3D; 127.0.0.1</span><br><span class="line">plugin_header_X-From-Where &#x3D; frp</span><br></pre></td></tr></table></figure>
-</li>
-<li><p>配置完成后，重启frpc服务，访问Client端和Server端的dashboard，如果看见的结果和以下截图一样，说明配置成功。<br><img src="/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/frps_dashboard.png" alt="frps管理界面"><br><img src="/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/frpc_dashboard.png" alt="frpc管理界面"></p>
-</li>
-</ol>
-<h2 id="三、-ESC上Nginx对二级域名做配置"><a href="#三、-ESC上Nginx对二级域名做配置" class="headerlink" title="三、 ESC上Nginx对二级域名做配置"></a>三、 ESC上Nginx对二级域名做配置</h2><p>针对http请求泛域名：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">    listen 80;</span><br><span class="line">    server_name *.test.com;     #这里可以使用泛二级域名，也可以像下面配置https那样，指定二级域名</span><br><span class="line">    location &#x2F; &#123;</span><br><span class="line">        proxy_pass http:&#x2F;&#x2F;127.0.0.1:4080;   # 这是要走80端口后要代理的端口，填上frps监听http请求的端口</span><br><span class="line">        proxy_set_header    Host            $host:80;</span><br><span class="line">        proxy_set_header    X-Real-IP       $remote_addr;</span><br><span class="line">        proxy_set_header    X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">        proxy_hide_header   X-Powered-By;</span><br><span class="line"></span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>针对https请求指定二级域名：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">server &#123;</span><br><span class="line">         listen 443 ssl http2;</span><br><span class="line">         server_name xxx.test.com; #填写绑定证书的域名</span><br><span class="line"></span><br><span class="line">         ssl_certificate cert&#x2F;cert.pem;</span><br><span class="line">         ssl_certificate_key cert&#x2F;cert.key;</span><br><span class="line">         ssl_session_timeout 5m;</span><br><span class="line">         ssl_ciphers ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4; #使用此加密套件。</span><br><span class="line">         ssl_protocols TLSv1 TLSv1.1 TLSv1.2 TLSv1.3; #使用该协议进行配置。</span><br><span class="line">         ssl_prefer_server_ciphers on;</span><br><span class="line">         location &#x2F; &#123;</span><br><span class="line">             proxy_pass http:&#x2F;&#x2F;127.0.0.1:4080;</span><br><span class="line">             proxy_ssl_server_name on;</span><br><span class="line">             proxy_redirect off;</span><br><span class="line"></span><br><span class="line">             proxy_set_header X-Real-IP $remote_addr;</span><br><span class="line">             proxy_set_header X-Forwarded-For $proxy_add_x_forwarded_for;</span><br><span class="line">             proxy_set_header X-Forwarded-Proto $scheme;</span><br><span class="line">             proxy_set_header Host $host;</span><br><span class="line">         &#125;</span><br><span class="line"> &#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="最终"><a href="#最终" class="headerlink" title="最终"></a>最终</h2><p>重启nginx之后,打开Chrome，就能通过二级域名访问内网web应用了！由于Nginx里配置了proxy_pass代理，因此不需要带上端口号，可以直接访问应用。<br>我们来梳理一下整个工作流程： 访问https://***.test.com时，之前配置过的dns解析能确保请求到达指定的阿里云ECS上， ECS上的Nginx会根据配置的子域名，来判断应该使用哪一套ssl证书，并转发到ECS指定的端口上（在本文中是4080端口）。4080端口上有frps的监听服务,frps会根据请求的二级域名，去配置表中遍历所有挂载的二级域名，命中后就找到了内网服务器，利用NAT映射，最终访问到我们指定的内网web应用上。</p>
-
+        
+          <p class="article-more-link">
+            <a href="/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
       <a data-url="https://likebard.github.io/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/" data-id="cks8bbkcj0002icuv97xmf47k" class="article-share-link">Share</a>
       
       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/frp/" rel="tag">frp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nginx/" rel="tag">nginx</a></li></ul>
+
     </footer>
   </div>
   
@@ -149,36 +136,11 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="Hooks特性探究"><a href="#Hooks特性探究" class="headerlink" title="Hooks特性探究"></a>Hooks特性探究</h1><h2 id="与Class组件不同的心智模型"><a href="#与Class组件不同的心智模型" class="headerlink" title="与Class组件不同的心智模型"></a>与Class组件不同的心智模型</h2><h3 id="使用hooks组件，props和state、还有内部的函数，它们在每一次的render中都是彼此独立的。一次render中生成的props和state也仅属于这次特定的渲染"><a href="#使用hooks组件，props和state、还有内部的函数，它们在每一次的render中都是彼此独立的。一次render中生成的props和state也仅属于这次特定的渲染" class="headerlink" title="使用hooks组件，props和state、还有内部的函数，它们在每一次的render中都是彼此独立的。一次render中生成的props和state也仅属于这次特定的渲染"></a>使用hooks组件，props和state、还有内部的函数，它们在每一次的render中都是彼此独立的。一次render中生成的props和state也仅属于这次特定的渲染</h3><p>考虑如下代码，它采用class写法:</p>
-<figure class="highlight plain"><figcaption><span>React from "react";</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">export default class ClassDiv extends React.Component &#123;</span><br><span class="line">    constructor(props) &#123;</span><br><span class="line">        super(props);</span><br><span class="line">        this.state &#x3D; &#123;</span><br><span class="line">            count: 0,</span><br><span class="line">        &#125;;</span><br><span class="line">        this.showAlert &#x3D; this.showAlert.bind(this);</span><br><span class="line">    &#125;</span><br><span class="line">    showAlert() &#123;</span><br><span class="line">        setTimeout(() &#x3D;&gt; &#123;</span><br><span class="line">            alert(&#96;count is $&#123;this.state.count&#125;&#96;);</span><br><span class="line">        &#125;, 3000);</span><br><span class="line">    &#125;</span><br><span class="line">    render() &#123;</span><br><span class="line">        return &lt;div&gt;</span><br><span class="line">            &lt;div&gt;&#123;this.state.count&#125;&lt;&#x2F;div&gt;</span><br><span class="line">            &lt;button onClick&#x3D;&#123;() &#x3D;&gt; &#123;</span><br><span class="line">                this.setState((preState) &#x3D;&gt; &#123;</span><br><span class="line">                    return &#123;</span><br><span class="line">                        count: preState.count + 1</span><br><span class="line">                    &#125;</span><br><span class="line">                &#125;)</span><br><span class="line">            &#125;&#125;&gt;点击+1&lt;&#x2F;button&gt;</span><br><span class="line">            &lt;button onClick&#x3D;&#123;this.showAlert&#125;&gt;alert&lt;&#x2F;button&gt;</span><br><span class="line">        &lt;&#x2F;div&gt;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>当我们触发含有弹窗的点击事件后，在这3秒内继续对state上的count累加，当弹窗出现时，显示的是count的最新值。<br>再看如下hook写法：</p>
-<figure class="highlight plain"><figcaption><span>&#123; useState, useEffect &#125; from "react";</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">export default function HookDiv() &#123;</span><br><span class="line">    const [count, setCount] &#x3D; useState(0);</span><br><span class="line">    function handelAlertClick()&#123;</span><br><span class="line">        setTimeout(() &#x3D;&gt; &#123;</span><br><span class="line">            alert(&#96;count is $&#123;count&#125;&#96;);</span><br><span class="line">        &#125;, 3000);</span><br><span class="line">    &#125;</span><br><span class="line">    return (</span><br><span class="line">      &lt;div&gt;</span><br><span class="line">        &lt;div&gt;&#123;count&#125;&lt;&#x2F;div&gt;</span><br><span class="line">        &lt;button onClick&#x3D;&#123;() &#x3D;&gt; &#123;setCount((count) &#x3D;&gt; count+1)&#125;&#125;&gt;加一&lt;&#x2F;button&gt;</span><br><span class="line">        &lt;button onClick&#x3D;&#123;handelAlertClick&#125;&gt;alertCount&lt;&#x2F;button&gt;</span><br><span class="line">      &lt;&#x2F;div&gt;</span><br><span class="line">    );</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<p>同样是在弹窗的点击事件触发后的3秒内对count累加，3秒后显示的是点击事件触发“那一刻”count的值。这揭示了两者之间存在着某种差异，官网上提过把hooks组件的每一次render看作“一帧”，结合这个例子来看，确实弹窗哪怕被延迟弹出，显示的count依然是那一次渲染的count值，而非像class组件那样总是显示最新的。底层的具体机制还有待探究，但这种情况确实是hook机制依赖闭包的一个证明</p>
-<h3 id="Ref"><a href="#Ref" class="headerlink" title="Ref"></a>Ref</h3><p>针对上述情况，假如我想在某次渲染中，拿到未来的props和state，实现跟class组件一样的效果怎么实现？那就要使用useRef,参考如下代码：</p>
-<pre><code class="import">
-export default function Example() {
-    const [count, setCount] = useCount(0);
-    const lastCount = useRef(count);
-
-    useEffect(() =&gt; {
-        //设置要预测的值
-        lastCount.current = count;
-        setTimeout(() =&gt; {
-            //读取要预测的值
-            console.log(&quot;count is&quot;, lastCount.current);
-        }, 3000);
-    });
-
-    return &lt;div&gt;
-        &lt;div&gt;{count}&lt;/div&gt;
-        &lt;button onClick={() =&gt; {　setCount(count +１)}　}&gt;+1&lt;/button&gt;
-    &lt;/div&gt;
-}
-
-## 避免effect多次调用
-可以设置deps依赖项，相当于告诉react，我在effect函数中的逻辑只依赖于deps中的某个元素。此外其他的props,state发生变化后，不要执行effect</code></pre>
-
+        
+          <p class="article-more-link">
+            <a href="/2021/08/12/react-hooks/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
@@ -221,50 +183,12 @@ export default function Example() {
 <li>JS引擎线程</li>
 <li>事件触发线程</li>
 <li>定时器线程</li>
-<li>网络请求线程<br>其中JS引擎就能说明我们为什么常说JS是单线程的。</li>
-</ul>
-</li>
-<li><p>首先进行URL解析，URL中出现了中文会转为Unicode字符（encodeURI()是Javascript中真正用来对URL编码的函数。）。按照本地host文件 &gt; 询问dns服务器，解析对应的IP地址。</p>
-<ul>
-<li><p>URL的组成部分：</p>
-</li>
-<li><p>protocol，协议头，譬如有http，ftp等</p>
-</li>
-<li><p>host，主机域名或IP地址</p>
-</li>
-<li><p>port，端口号</p>
-</li>
-<li><p>path，目录路径</p>
-</li>
-<li><p>query，即查询参数</p>
-</li>
-<li><p>fragment，即 #后的hash值，一般用来定位到某个位置， a标签的href中”#abc”，点击后会定位到id为abc的元素上，或者name为abc的a标签上</p>
-</li>
-</ul>
-</li>
-<li><p>查到ip后跟服务器建立连接，三次握手四次挥手</p>
-<ul>
-<li>主机发送SYN = 1的TCP包给服务器</li>
-</ul>
-</li>
-</ol>
-<ol start="4">
-<li>建立tcp/ip连接后就返回html文件，判断是否在缓存里，有就返回304,让浏览器直接读取缓存，没有的话就去后台拿<ul>
-<li>强缓存</li>
-<li>协商缓存</li>
-<li>from disk cache和from memory cache</li>
-<li>启发式缓存： 如果Expires, Cache-Control: max-age, 或 Cache-Control:s-maxage 都没有在响应头中出现, 并且也没有其它缓存的设置, 那么浏览器默认会采用一个启发式的算法, 通常会取响应头的Date_value - Last-Modified_value值的10%作为缓存时间.</li>
-</ul>
-</li>
-<li>tcp/ip的并发限制，浏览器对同一域名下的并发连接是有限制的。http1中一个资源下载就对应一个tcp/ip请求，http2中还有多路复用机制，需要归纳比较http1.0-http3的特点,还有https</li>
-</ol>
-<ol start="6">
-<li>解析页面流程<ul>
-<li><img src="https://mmbiz.qpic.cn/mmbiz_png/aVp1YC8UV0cd9OTY4K2QLZVZpkPy4vzKlicFpfcdxPEhnYe3dCFpu1auzwXKtXQaVvu29OrhDibpmIK6d36yMa2g/640?wx_fmt=png&tp=webp&wxfrom=5&wx_lazy=1&wx_co=1" alt="avatar"></li>
-</ul>
-</li>
-</ol>
-
+<li>网络请求线程<br>其中JS引擎就能说明我们为什么常说JS是单线程的。</li></ul></li></ol>
+        
+          <p class="article-more-link">
+            <a href="/2021/08/12/%E4%BB%8EURL%E5%88%B0%E7%94%9F%E6%88%90%E9%A1%B5%E9%9D%A2/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
@@ -313,100 +237,12 @@ export default function Example() {
 </li>
 <li><p>DOM节点</p>
 </li>
-<li><p>AJAX网络请求</p>
-</li>
-</ul>
-<p><strong>有三个标签允许跨域加载资源：</strong></p>
-<ul>
-<li><p><code>&lt;img src=xxx&gt;</code></p>
-</li>
-<li><p><code>&lt;link href=xxx&gt;</code></p>
-</li>
-<li><p><code>&lt;script src=xxx&gt;</code></p>
-</li>
-</ul>
-<h2 id="二、常见跨域场景"><a href="#二、常见跨域场景" class="headerlink" title="二、常见跨域场景"></a>二、常见跨域场景</h2><h2 id="三、跨域各解决方案"><a href="#三、跨域各解决方案" class="headerlink" title="三、跨域各解决方案"></a>三、跨域各解决方案</h2><h3 id="1-jsonp"><a href="#1-jsonp" class="headerlink" title="1. jsonp"></a>1. jsonp</h3><h4 id="原理"><a href="#原理" class="headerlink" title="原理"></a>原理</h4><p>利用<code>&lt;script&gt;</code>标签没有跨域限制的特殊性，从其他来源获取数据.</p>
-<h4 id="优缺点"><a href="#优缺点" class="headerlink" title="优缺点"></a>优缺点</h4><p>JSONP优点是简单兼容性好，<strong>缺点是仅支持get方式具有局限性，不安全可能会遭受XSS攻击</strong>。<code>[?]</code></p>
-<h4 id="实现流程"><a href="#实现流程" class="headerlink" title="实现流程"></a>实现流程</h4><ul>
-<li><p>本地定义一个函数callback，传参为data</p>
-</li>
-<li><p>script标签向非同源的服务器端发起请求，服务器端返回字符串。该文件中调用了方法callback，并传入data数据</p>
-</li>
-<li><p>前端拿到js文件之后就会执行，此时就获得了第三方后端传回来的数据</p>
-</li>
-</ul>
-<h3 id="2-cors"><a href="#2-cors" class="headerlink" title="2. cors"></a>2. cors</h3><p><strong>CORS需要浏览器和后端同时支持。IE8和9需要通过XDomainRequest来实现。</strong></p>
-<ul>
-<li><p>服务端设置Access-Control-Allow-Origin就可以开启CORS。该属性表明哪些Origin(域名)可以访问资源</p>
-</li>
-<li><p>Access-Control-Allow-Credentials: 布尔值，true允许客户端携带cookie，使用他的时候前端也要同时设置xhr.withCredentials = true。这样才能允许把cookie发到服务器</p>
-</li>
-<li><p>Access-Control-Allow-Headers： 允许设置的头部信息</p>
-</li>
-<li><p>Access-Control-Allow-Methods： 设置允许请求的Methods方法</p>
-</li>
-<li><p>Access-Control-Expose-Headers： 允许客户端获取的Headers头部key。<br>CORS请求时，XMLHttpRequest对象的getResponseHeader()方法只能拿到6个基本字段：Cache-Control、Content-Language、Content-Type、Expires、Last-Modified、Pragma。如果想拿到其他字段，就必须在Access-Control-Expose-Headers里面指定。</p>
-</li>
-</ul>
-<p>需要注意的是，如果要发送Cookie，Access-Control-Allow-Origin就不能设为星号，必须指定明确的、与请求网页一致的域名。同时，Cookie依然遵循同源政策，只有用服务器域名设置的Cookie才会上传，其他域名的Cookie并不会上传，且（跨源）原网页代码中的document.cookie也无法读取服务器域名下的Cookie。</p>
-<h4 id="简单请求"><a href="#简单请求" class="headerlink" title="简单请求"></a>简单请求</h4><h5 id="只要满足以下两大条件就属于简单请求（就是可以通过Form表单来实现的请求）"><a href="#只要满足以下两大条件就属于简单请求（就是可以通过Form表单来实现的请求）" class="headerlink" title="只要满足以下两大条件就属于简单请求（就是可以通过Form表单来实现的请求）"></a>只要满足以下两大条件就属于简单请求（就是可以通过Form表单来实现的请求）</h5><ol>
-<li>使用下列方法之一：</li>
-</ol>
-<ul>
-<li>GET</li>
-<li>HEAD</li>
-<li>POST</li>
-</ul>
-<ol start="2">
-<li>Content-Type的值仅限于下列三者之一:</li>
-</ol>
-<ul>
-<li>text/plain</li>
-<li>multipart/form-data</li>
-<li>application/x-www-form-urlencoded</li>
-</ul>
-<h4 id="复杂请求"><a href="#复杂请求" class="headerlink" title="复杂请求"></a>复杂请求</h4><p>不符合简单请求的即为复杂请求，在正式通信之前，增加一次HTTP查询请求，称为”预检”，使用Option方法，通过该请求来知道服务端是否允许跨域。</p>
-<h4 id="区分简单请求和非简单请求的动机"><a href="#区分简单请求和非简单请求的动机" class="headerlink" title="区分简单请求和非简单请求的动机"></a>区分简单请求和非简单请求的动机</h4><ul>
-<li>对于简单请求而言，由于其可以通过Form发送，因此预检也不能禁止其跨源行为。</li>
-<li>对于非简单请求而言：</li>
-</ul>
-<ol>
-<li>节省后端计算量：请求的数据量可以很大，因此提出option预检方案，先询问服务器是否可以跨域，假如跨域允许，再发送正式请求。</li>
-</ol>
-<h3 id="3-postMessage"><a href="#3-postMessage" class="headerlink" title="3.postMessage"></a>3.postMessage</h3><p>postMessage可以用于解决如下问题:</p>
-<ul>
-<li>页面和其新打开的窗口之间通信</li>
-<li>窗口和窗口之间的通信</li>
-<li>页面和其嵌套的iframe之间通信</li>
-<li>上述三者之间的跨域通信</li>
-</ul>
-<p>总结起来就是 <strong>postMessage()方法允许来自不同源的脚本采用异步方式进行有限的通信，可以实现跨文本档、多窗口、跨域消息传递。</strong><br><code>otherWindow.postMessage(message, targetOrigin, [transfer]);</code></p>
-<ul>
-<li>message: 将要发送到其他 window的数据.</li>
-<li>targetOrigin:通过窗口的origin属性来指定哪些窗口能接收到消息事件，其值可以是字符串”*”（表示无限制）或者一个URI。在发送消息的时候，如果目标窗口的协议、主机地址或端口这三者的任意一项不匹配targetOrigin提供的值，那么消息就不会被发送；只有三者完全匹配，消息才会被发送。</li>
-<li>transfer(<strong>可选</strong>)：是一串和message 同时传递的 Transferable 对象. 这些对象的所有权将被转移给消息的接收方，而发送一方将不再保有所有权。</li>
-</ul>
-<h3 id="4-websocket"><a href="#4-websocket" class="headerlink" title="4.websocket"></a>4.websocket</h3><p>Websocket是HTML5的一个持久化的协议，它实现了浏览器与服务器的全双工通信，同时也是跨域的一种解决方案。WebSocket和HTTP都是应用层协议，都基于 TCP 协议。但是 <strong>WebSocket 是一种双向通信协议，在建立连接之后，WebSocket 的 server 与 client 都能主动向对方发送或接收数据</strong>。同时，WebSocket 在建立连接时需要借助 HTTP 协议，连接建立好了之后 client 与 server 之间的双向通信就与 HTTP 无关了。<br>原生WebSocket API使用起来不太方便，我们可以使用Socket.io，它很好地封装了webSocket接口，提供了更简单、灵活的接口，也对不支持webSocket的浏览器提供了向下兼容。</p>
-<h3 id="5-后端代理"><a href="#5-后端代理" class="headerlink" title="5.后端代理"></a>5.后端代理</h3><ul>
-<li>Node中间件代理</li>
-<li>Nginx反向代理</li>
-</ul>
-<h3 id="6-window-name-location-hash-document-domain-iframe"><a href="#6-window-name-location-hash-document-domain-iframe" class="headerlink" title="6. window.name / location.hash / document.domain + iframe"></a>6. window.name / location.hash / document.domain + iframe</h3><ul>
-<li>window.name属性的独特之处：name值在不同的页面（甚至不同域名）加载后依旧存在，并且可以支持非常长的 name 值（2MB）.</li>
-<li>location.hash跨域以url中的hash值为载体，在子iframe中拿取父Window的hash值，实现父传子，在子iframe中也可以改变父Window的URL hash值，父窗口用onhashchange监听hash值的变化，即可实现子传父。</li>
-<li>document.domain这种方法只能用于二级域名相同的情况下，比如a.test.com和b.test.com适用于该方式。 只需要给页面添加 document.domain =’test.com’ 表示二级域名都相同就可以实现跨域。</li>
-</ul>
-<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
-<li><p>CORS支持所有类型的HTTP请求，是跨域HTTP请求的根本解决方案</p>
-</li>
-<li><p>JSONP只支持GET请求，JSONP的优势在于支持老式浏览器，以及可以向不支持CORS的网站请求数据。</p>
-</li>
-<li><p>不管是Node中间件代理还是nginx反向代理，主要是通过同源策略对服务器不加限制。</p>
-</li>
-<li><p>日常工作中，用得比较多的跨域方案是cors和nginx反向代理</p>
-</li>
-</ul>
-
+<li><p>AJAX网络请求</p></li></ul>
+        
+          <p class="article-more-link">
+            <a href="/2021/08/12/%E8%B7%A8%E5%9F%9F/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
@@ -442,90 +278,19 @@ export default function Example() {
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="React合成事件"><a href="#React合成事件" class="headerlink" title="React合成事件"></a>React合成事件</h1><h2 id="概念介绍"><a href="#概念介绍" class="headerlink" title="概念介绍"></a>概念介绍</h2><p>React合成事件(SyntheticEvent)是React自身的一套事件系统，它是模拟原生DOM事件所有能力的一个事件对象，对所有浏览器原生事件做了兼容性包装，拥有与浏览器原生事件相同的接口。</p>
+        <h2 id="概念介绍"><a href="#概念介绍" class="headerlink" title="概念介绍"></a>概念介绍</h2><p>React合成事件(SyntheticEvent)是React自身的一套事件系统，它是模拟原生DOM事件所有能力的一个事件对象，对所有浏览器原生事件做了兼容性包装，拥有与浏览器原生事件相同的接口。</p>
 <h2 id="详细介绍"><a href="#详细介绍" class="headerlink" title="详细介绍"></a>详细介绍</h2><ul>
 <li>它通过事件委托，在documnet上注册事件代理了组件树中的所有事件(<strong>17版本有变动</strong>)，并且它监听的是 <strong>document的冒泡阶段</strong>。</li>
 <li>在React中所有事件都是合成的，不是原生事件，但可以通过e.nativeEvent属性获取原生DOM事件。</li>
 <li>合成事件的目的：<ol>
 <li>进行浏览器兼容，实现更好的跨平台。React 采用的是顶层事件代理机制，能够保证冒泡一致性，可以跨浏览器执行。React 提供的合成事件用来抹平不同浏览器事件对象之间的差异，将不同平台事件模拟合成事件。</li>
 <li>避免垃圾回收。使用原生事件会被频繁创建和回收，因此引入事件池，在事件池中获取或释放事件对象。<strong>即 React 事件对象不会被释放掉，而是存放进一个数组中，当事件触发，就从这个数组中弹出，避免频繁地去创建和销毁(垃圾回收)</strong>。</li>
-<li>方便事件统一管理和事务机制。</li>
-</ol>
-</li>
-</ul>
-<h2 id="原生事件回顾"><a href="#原生事件回顾" class="headerlink" title="原生事件回顾"></a>原生事件回顾</h2><ol>
-<li><p>事件捕获<br>当某个元素触发某个事件（如 onclick ），顶层对象 document 就会发出一个事件流，随着 DOM 树的节点向目标元素节点流去，直到到达事件真正发生的目标元素。在这个过程中，事件相应的监听函数是不会被触发的。</p>
-</li>
-<li><p>事件目标<br>当到达目标元素之后，执行目标元素该事件相应的处理函数。如果没有绑定监听函数，那就不执行。</p>
-</li>
-<li><p>事件冒泡<br>从目标元素开始，往顶层元素传播。途中如果有节点绑定了相应的事件处理函数，这些函数都会被触发一次。如果想阻止事件起泡，可以使用 e.stopPropagation() 或者e.cancelBubble=true（IE）来阻止事件的冒泡传播。</p>
-</li>
-<li><p>addEventListener第三个参数的作用</p>
-<ul>
-<li>true: 表示在事件捕获阶段触发handler</li>
-<li>false(默认)： 表示在事件冒泡阶段触发handler</li>
-</ul>
-</li>
-<li><p>事件委托/事件代理<br>简单理解就是将一个响应事件委托到另一个元素。当子节点被点击时，click 事件向上冒泡，父节点捕获到事件后，我们判断是否为所需的节点，然后进行处理。其优点在于减少内存消耗和动态绑定事件。</p>
-</li>
-</ol>
-<h2 id="原生事件与合成事件的区别"><a href="#原生事件与合成事件的区别" class="headerlink" title="原生事件与合成事件的区别"></a>原生事件与合成事件的区别</h2><table>
-<thead>
-<tr>
-<th>比较角度</th>
-<th>原生事件</th>
-<th>React 事件</th>
-</tr>
-</thead>
-<tbody><tr>
-<td>事件名称命名方式</td>
-<td>名称全部小写（onclick, onblur）</td>
-<td>名称采用小驼峰（onClick, onBlur）</td>
-</tr>
-<tr>
-<td>事件处理函数语法</td>
-<td>字符串</td>
-<td>函数</td>
-</tr>
-<tr>
-<td>阻止默认行为方式</td>
-<td>事件返回 false</td>
-<td>使用 e.preventDefault() 方法</td>
-</tr>
-</tbody></table>
-<h2 id="React-事件与原生事件执行顺序"><a href="#React-事件与原生事件执行顺序" class="headerlink" title="React 事件与原生事件执行顺序"></a>React 事件与原生事件执行顺序</h2><p>参考代码：</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br></pre></td><td class="code"><pre><span class="line">class App extends React.Component&lt;any, any&gt; &#123;</span><br><span class="line">  parentRef: any;</span><br><span class="line">  childRef: any;</span><br><span class="line">  constructor(props: any) &#123;</span><br><span class="line">    super(props);</span><br><span class="line">    this.parentRef &#x3D; React.createRef();</span><br><span class="line">    this.childRef &#x3D; React.createRef();</span><br><span class="line">  &#125;</span><br><span class="line">  componentDidMount() &#123;</span><br><span class="line">    console.log(&quot;React componentDidMount！&quot;);</span><br><span class="line">    this.parentRef.current?.addEventListener(&quot;click&quot;, () &#x3D;&gt; &#123;</span><br><span class="line">      console.log(&quot;原生事件：父元素 DOM 事件监听！&quot;);</span><br><span class="line">    &#125;);</span><br><span class="line">    this.childRef.current?.addEventListener(&quot;click&quot;, () &#x3D;&gt; &#123;</span><br><span class="line">      console.log(&quot;原生事件：子元素 DOM 事件监听！&quot;);</span><br><span class="line">    &#125;);</span><br><span class="line">    document.addEventListener(&quot;click&quot;, (e) &#x3D;&gt; &#123;</span><br><span class="line">      console.log(&quot;原生事件：document DOM 事件监听！&quot;);</span><br><span class="line">    &#125;);</span><br><span class="line">  &#125;</span><br><span class="line">  parentClickFun &#x3D; () &#x3D;&gt; &#123;</span><br><span class="line">    console.log(&quot;React 事件：父元素事件监听！&quot;);</span><br><span class="line">  &#125;;</span><br><span class="line">  childClickFun &#x3D; () &#x3D;&gt; &#123;</span><br><span class="line">    console.log(&quot;React 事件：子元素事件监听！&quot;);</span><br><span class="line">  &#125;;</span><br><span class="line">  render() &#123;</span><br><span class="line">    return (</span><br><span class="line">      &lt;div ref&#x3D;&#123;this.parentRef&#125; onClick&#x3D;&#123;this.parentClickFun&#125;&gt;</span><br><span class="line">        &lt;div ref&#x3D;&#123;this.childRef&#125; onClick&#x3D;&#123;this.childClickFun&#125;&gt;</span><br><span class="line">          分析事件执行顺序</span><br><span class="line">        &lt;&#x2F;div&gt;</span><br><span class="line">      &lt;&#x2F;div&gt;</span><br><span class="line">    );</span><br><span class="line">  &#125;</span><br><span class="line">&#125;</span><br><span class="line">export default App;</span><br></pre></td></tr></table></figure>
-<p>可以尝试触发事件看看打印结果，根据结果我们可以知道：</p>
-<ol>
-<li>React 所有事件都挂载在 document 对象上；</li>
-<li>当真实 DOM 元素触发事件，会冒泡到 document 对象后，再处理 React 事件；</li>
-<li>所以会先执行原生事件，然后处理 React 事件；</li>
-<li>最后真正执行 document 上挂载的原生事件。</li>
-</ol>
-<h3 id="原生事件和合成事件能混用吗？"><a href="#原生事件和合成事件能混用吗？" class="headerlink" title="原生事件和合成事件能混用吗？"></a>原生事件和合成事件能混用吗？</h3><p>由以上结果我们可以得出，原生和合成事件是不能混用的。我们设想，假如在原生事件中阻止冒泡，那么react组件上的合成事件由于统一挂在document上，所以不会再生效。</p>
-<h2 id="合成事件的事件池"><a href="#合成事件的事件池" class="headerlink" title="合成事件的事件池"></a>合成事件的事件池</h2><p>合成事件对象池，是react事件系统提供的一种性能优化方式。合成事件对象在事件池统一管理，不同类型的合成事件具有不同的事件池。</p>
-<ul>
-<li>当事件池未满时，React创建新的事件对象，派发给组件。</li>
-<li>当事件池装满时，React从事件池中复用事件对象，派发给组件。</li>
-</ul>
-<p>再看以下例子:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">function handleChange(e) &#123;</span><br><span class="line">  console.log(&quot;原始数据：&quot;, e.target)</span><br><span class="line">  setTimeout(() &#x3D;&gt; &#123;</span><br><span class="line">    console.log(&quot;定时任务 e.target：&quot;, e.target); &#x2F;&#x2F; null</span><br><span class="line">    console.log(&quot;定时任务：e：&quot;, e); </span><br><span class="line">  &#125;, 100);</span><br><span class="line">&#125;</span><br><span class="line">function App() &#123;</span><br><span class="line">  return (</span><br><span class="line">    &lt;div className&#x3D;&quot;App&quot;&gt;</span><br><span class="line">      &lt;button onClick&#x3D;&#123;handleChange&#125;&gt;测试事件池&lt;&#x2F;button&gt;</span><br><span class="line">    &lt;&#x2F;div&gt;</span><br><span class="line">  );</span><br><span class="line">&#125;</span><br><span class="line"></span><br><span class="line">export default App;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">function handleChange(e) &#123;</span><br><span class="line">  setData(data &#x3D;&gt; (&#123;</span><br><span class="line">    ...data,</span><br><span class="line">    &#x2F;&#x2F; 这在react16以及更早期的版本中会崩溃</span><br><span class="line">    text: e.target.value</span><br><span class="line">  &#125;));</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-<p>在react16之前的版本，合成事件对象的事件处理函数在被调用之后，所有的属性都会被置空，所以定时器中打印的e对象的属性值全为null。如果我们想在事件函数运行完之后还获取事件对象的属性，可以使用React提供的e.persist()方法，保留所有属性,如下代码:</p>
-<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br></pre></td><td class="code"><pre><span class="line">&#x2F;&#x2F; 只修改 handleChange 方法，其他不变</span><br><span class="line">function handleChange(e) &#123;</span><br><span class="line">  &#x2F;&#x2F; 只增加 persist() 执行</span><br><span class="line">  e.persist();</span><br><span class="line">  </span><br><span class="line">  console.log(&quot;原始数据：&quot;, e.target)</span><br><span class="line">  setTimeout(() &#x3D;&gt; &#123;</span><br><span class="line">    console.log(&quot;定时任务 e.target：&quot;, e.target); &#x2F;&#x2F; null</span><br><span class="line">    console.log(&quot;定时任务：e：&quot;, e); </span><br><span class="line">  &#125;, 100);</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-
-<h2 id="具体代码分析"><a href="#具体代码分析" class="headerlink" title="具体代码分析"></a>具体代码分析</h2><p>具体到代码，可以查看 <strong>react-reconciler/src/ReactFiberCompleteWork.old.js</strong> 文件：</p>
-<h2 id="17版本的更新"><a href="#17版本的更新" class="headerlink" title="17版本的更新"></a>17版本的更新</h2><ol>
-<li><p>不再使用事件池机制，所以不存在事件处理函数调用后，event对象上属性都被置空的问题。e.persist() 在 React 事件对象中仍然可用，只是无效果罢了。</p>
-</li>
-<li><p>事件委托的变更，不再将事件处理添加到document上，而是将事件处理渲染到React树的根DOM容器中：</p>
- <figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">const rootNode &#x3D; document.getElementById(&#39;root&#39;);</span><br><span class="line">ReactDOM.render(&lt;App &#x2F;&gt;, rootNode);</span><br></pre></td></tr></table></figure>
-<p> 在 React 16 及之前版本中，React 会对大多数事件进行 document.addEventListener() 操作。React v17 开始会通过调用 rootNode.addEventListener() 来代替。</p>
-</li>
-</ol>
-
+<li>方便事件统一管理和事务机制。</li></ol></li></ul>
+        
+          <p class="article-more-link">
+            <a href="/2021/08/12/React%E4%BA%8B%E4%BB%B6%E6%9C%BA%E5%88%B6/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
@@ -561,7 +326,7 @@ export default function Example() {
     
     <div class="article-entry" itemprop="articleBody">
       
-        <h1 id="React源码"><a href="#React源码" class="headerlink" title="React源码"></a>React源码</h1><h2 id="Reconciler"><a href="#Reconciler" class="headerlink" title="Reconciler:"></a>Reconciler:</h2><p>每当更新发生时， <strong>Reconciler</strong> 会做如下工作：</p>
+        <h2 id="Reconciler"><a href="#Reconciler" class="headerlink" title="Reconciler:"></a>Reconciler:</h2><p>每当更新发生时， <strong>Reconciler</strong> 会做如下工作：</p>
 <ul>
 <li>调用函数组件、或class组件的render方法，将返回的JSX转为虚拟DOM。</li>
 <li>将本次虚拟DOM跟上次的对比，根据Diff算法找出变化的部分。</li>
@@ -572,83 +337,16 @@ export default function Example() {
 <li>ReactDOM</li>
 <li>ReactNative</li>
 <li>ReactTest</li>
-<li>ReactArt<br>每次更新发生时，Renderer接到Reconciler通知，将变化的组件渲染在当前宿主环境。</li>
-</ul>
-<h2 id="React15架构–-gt-React16架构"><a href="#React15架构–-gt-React16架构" class="headerlink" title="React15架构–&gt;React16架构"></a>React15架构–&gt;React16架构</h2><ol>
-<li>在React15中：</li>
-</ol>
-<ul>
-<li>每个组件更新都会通过Reconciler和Renderer,他们是交替工作的。</li>
-<li>使用递归式更新，而整个过程都是同步的。</li>
-</ul>
-<p>缺点在于一旦更新开始，中途就无法中断。当递归层级过深，时间超过了16ms,用户交互就会卡顿。</p>
-<ol start="2">
-<li>在React16中：</li>
-</ol>
-<ul>
-<li>新增了调度器Scheduler：<ol>
-<li>当浏览器有剩余时间的时候通知我们。</li>
-<li>还提供了多种调度优先级的任务设置。</li>
-</ol>
-</li>
-<li>Reconciler的改变：<br>从递归处理虚拟Dom变成了可以中断的循环过程。只有所有组件都完成Reconciler的工作，才会统一交给Renderer，而不是交替工作。由于Reconciler的所有工作都在内存中进行，所以即使反复中断，用户也不会看见更新不完全的DOM。</li>
-<li>React Element数据结构的改变:<br>曾经用于 <strong>递归的无法中断的更新</strong> 的 <strong>虚拟DOM</strong> 数据结构已经无法胜任 <strong>异步的可中断更新</strong> 的需求。于是，叫做 <strong>Fiber节点</strong> 的全新数据结构诞生。</li>
-</ul>
-<h2 id="Fiber节点的结构"><a href="#Fiber节点的结构" class="headerlink" title="Fiber节点的结构"></a>Fiber节点的结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">function FiberNode(</span><br><span class="line">  tag: WorkTag,</span><br><span class="line">  pendingProps: mixed,</span><br><span class="line">  key: null | string,</span><br><span class="line">  mode: TypeOfMode,</span><br><span class="line">) &#123;</span><br><span class="line">  &#x2F;&#x2F; 作为静态数据结构的属性</span><br><span class="line">  this.tag &#x3D; tag;&#x2F;&#x2F; Fiber对应组件的类型 Function&#x2F;Class&#x2F;Host...</span><br><span class="line">  this.key &#x3D; key;&#x2F;&#x2F; key属性</span><br><span class="line">  &#x2F;&#x2F; 大部分情况同type，某些情况不同，比如FunctionComponent使用React.memo包裹</span><br><span class="line">  this.elementType &#x3D; null;</span><br><span class="line">  &#x2F;&#x2F; 对于 FunctionComponent，指函数本身，对于ClassComponent，指class，对于HostComponent，指DOM节点tagName</span><br><span class="line">  this.type &#x3D; null;</span><br><span class="line">  this.stateNode &#x3D; null;&#x2F;&#x2F; Fiber对应的真实DOM节点</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 用于连接其他Fiber节点形成Fiber树</span><br><span class="line">  this.return &#x3D; null;&#x2F;&#x2F; 指向父级Fiber节点</span><br><span class="line">  this.child &#x3D; null;&#x2F;&#x2F; 指向子Fiber节点</span><br><span class="line">  this.sibling &#x3D; null;&#x2F;&#x2F; 指向右边第一个兄弟Fiber节点</span><br><span class="line">  this.index &#x3D; 0;</span><br><span class="line"></span><br><span class="line">  this.ref &#x3D; null;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 作为动态的工作单元的属性</span><br><span class="line">  &#x2F;&#x2F; 保存本次更新造成的状态改变相关信息</span><br><span class="line">  this.pendingProps &#x3D; pendingProps;</span><br><span class="line">  this.memoizedProps &#x3D; null;</span><br><span class="line">  this.updateQueue &#x3D; null;</span><br><span class="line">  this.memoizedState &#x3D; null;</span><br><span class="line">  this.dependencies &#x3D; null;</span><br><span class="line"></span><br><span class="line">  this.mode &#x3D; mode;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 保存本次更新会造成的DOM操作</span><br><span class="line">  this.effectTag &#x3D; NoEffect;</span><br><span class="line">  this.nextEffect &#x3D; null;</span><br><span class="line"></span><br><span class="line">  this.firstEffect &#x3D; null;</span><br><span class="line">  this.lastEffect &#x3D; null;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 调度优先级相关</span><br><span class="line">  this.lanes &#x3D; NoLanes;</span><br><span class="line">  this.childLanes &#x3D; NoLanes;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 指向该fiber在另一次更新时对应的fiber</span><br><span class="line">  this.alternate &#x3D; null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
+<li>ReactArt<br>每次更新发生时，Renderer接到Reconciler通知，将变化的组件渲染在当前宿主环境。</li></ul>
+        
+          <p class="article-more-link">
+            <a href="/2021/08/12/React%E6%BA%90%E7%A0%81/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
       <a data-url="https://likebard.github.io/2021/08/12/React%E6%BA%90%E7%A0%81/" data-id="cks8bbkcm0003icuvfvko6v5h" class="article-share-link">Share</a>
-      
-      
-    </footer>
-  </div>
-  
-</article>
-
-
-  
-    <article id="post-hello-world" class="article article-type-post" itemscope itemprop="blogPost">
-  <div class="article-meta">
-    <a href="/2021/08/12/hello-world/" class="article-date">
-  <time datetime="2021-08-12T02:08:48.401Z" itemprop="datePublished">2021-08-12</time>
-</a>
-    
-  </div>
-  <div class="article-inner">
-    
-    
-      <header class="article-header">
-        
-  
-    <h1 itemprop="name">
-      <a class="article-title" href="/2021/08/12/hello-world/">Hello World</a>
-    </h1>
-  
-
-      </header>
-    
-    <div class="article-entry" itemprop="articleBody">
-      
-        <p>Welcome to <a href="https://hexo.io/" target="_blank" rel="noopener">Hexo</a>! This is your very first post. Check <a href="https://hexo.io/docs/" target="_blank" rel="noopener">documentation</a> for more info. If you get any problems when using Hexo, you can find the answer in <a href="https://hexo.io/docs/troubleshooting.html" target="_blank" rel="noopener">troubleshooting</a> or you can ask me on <a href="https://github.com/hexojs/hexo/issues" target="_blank" rel="noopener">GitHub</a>.</p>
-<h2 id="Quick-Start"><a href="#Quick-Start" class="headerlink" title="Quick Start"></a>Quick Start</h2><h3 id="Create-a-new-post"><a href="#Create-a-new-post" class="headerlink" title="Create a new post"></a>Create a new post</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo new <span class="string">"My New Post"</span></span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/writing.html" target="_blank" rel="noopener">Writing</a></p>
-<h3 id="Run-server"><a href="#Run-server" class="headerlink" title="Run server"></a>Run server</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo server</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/server.html" target="_blank" rel="noopener">Server</a></p>
-<h3 id="Generate-static-files"><a href="#Generate-static-files" class="headerlink" title="Generate static files"></a>Generate static files</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo generate</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/generating.html" target="_blank" rel="noopener">Generating</a></p>
-<h3 id="Deploy-to-remote-sites"><a href="#Deploy-to-remote-sites" class="headerlink" title="Deploy to remote sites"></a>Deploy to remote sites</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">$ hexo deploy</span><br></pre></td></tr></table></figure>
-
-<p>More info: <a href="https://hexo.io/docs/one-command-deployment.html" target="_blank" rel="noopener">Deployment</a></p>
-
-      
-    </div>
-    <footer class="article-footer">
-      <a data-url="https://likebard.github.io/2021/08/12/hello-world/" data-id="cks8bbkco0004icuvaxnt9bxd" class="article-share-link">Share</a>
       
       
     </footer>
@@ -672,7 +370,7 @@ export default function Example() {
         
   
     <h1 itemprop="name">
-      <a class="article-title" href="/2020/07/15/markdown%E8%AF%AD%E6%B3%95%E8%AE%B0%E5%BD%95/">first artical</a>
+      <a class="article-title" href="/2020/07/15/markdown%E8%AF%AD%E6%B3%95%E8%AE%B0%E5%BD%95/">MarkDown语法记录</a>
     </h1>
   
 
@@ -681,70 +379,11 @@ export default function Example() {
     <div class="article-entry" itemprop="articleBody">
       
         <h1 id="标题："><a href="#标题：" class="headerlink" title="标题："></a>标题：</h1><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"># 这是 &lt;h1&gt; 一级标题</span><br><span class="line"></span><br><span class="line">## 这是 &lt;h2&gt; 二级标题</span><br><span class="line"></span><br><span class="line">### 这是 &lt;h3&gt; 三级标题</span><br><span class="line"></span><br><span class="line">#### 这是 &lt;h4&gt; 四级标题</span><br><span class="line"></span><br><span class="line">##### 这是 &lt;h5&gt; 五级标题</span><br><span class="line"></span><br><span class="line">###### 这是 &lt;h6&gt; 六级标题</span><br><span class="line"></span><br><span class="line"># 这个标题拥有 1 个 id &#123;#my_id&#125;</span><br><span class="line"></span><br><span class="line"># 这个标题有 2 个 classes &#123;.class1 .class2&#125;</span><br></pre></td></tr></table></figure>
-
-<h1 id="强调："><a href="#强调：" class="headerlink" title="强调："></a>强调：</h1><p><em>这会是 斜体 的文字</em><br><em>这会是 斜体 的文字</em></p>
-<p><strong>这会是 粗体 的文字</strong><br><strong>这会是 粗体 的文字</strong></p>
-<p><em>你也 <strong>组合</strong> 这些符号</em></p>
-<p><del>这个文字将会被横线删除</del></p>
-<h1 id="列表："><a href="#列表：" class="headerlink" title="列表："></a>列表：</h1><h2 id="无序列表"><a href="#无序列表" class="headerlink" title="无序列表"></a>无序列表</h2><ul>
-<li>Item 1</li>
-<li>Item 2<ul>
-<li>Item 2a</li>
-<li>Item 2b<h2 id="有序列表"><a href="#有序列表" class="headerlink" title="有序列表"></a>有序列表</h2></li>
-</ul>
-</li>
-</ul>
-<ol>
-<li>Item 1</li>
-<li>Item 2</li>
-<li>Item 3<ol>
-<li>Item 3a</li>
-<li>Item 3b</li>
-</ol>
-</li>
-</ol>
-<h1 id="添加图片"><a href="#添加图片" class="headerlink" title="添加图片:"></a>添加图片:</h1><p><img src="/images/logo.png" alt="GitHub Logo"><br>Format: <img src="/.io//url" alt="Alt Text"></p>
-<h1 id="链接"><a href="#链接" class="headerlink" title="链接:"></a>链接:</h1><p><a href="https://github.com" target="_blank" rel="noopener">https://github.com</a> - 自动生成！<br><a href="https://github.com" target="_blank" rel="noopener">GitHub</a></p>
-<h1 id="引用"><a href="#引用" class="headerlink" title="引用:"></a>引用:</h1><p>正如 Kanye West 所说：</p>
-<blockquote>
-<p>We’re living the future so<br>the present is our past.</p>
-</blockquote>
-<h1 id="分割线"><a href="#分割线" class="headerlink" title="分割线:"></a>分割线:</h1><p>如下，三个或者更多的</p>
-<hr>
-<p>连字符</p>
-<hr>
-<p>星号</p>
-<hr>
-<p>下划线</p>
-<h1 id="行内代码"><a href="#行内代码" class="headerlink" title="行内代码:"></a>行内代码:</h1><p>我觉得你应该在这里使用<br><code>&lt;addr&gt;</code> 才对。</p>
-<h2 id="代码块"><a href="#代码块" class="headerlink" title="代码块"></a>代码块</h2><p>你可以在你的代码上面和下面添加 ``` 来表示代码块。</p>
-<h2 id="语法高亮"><a href="#语法高亮" class="headerlink" title="语法高亮"></a>语法高亮</h2><p>你可以给你的代码块添加任何一种语言的语法高亮</p>
-<p>例如，给 ruby 代码添加语法高亮：</p>
-<figure class="highlight ruby"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">require</span> <span class="string">'redcarpet'</span></span><br><span class="line">markdown = Redcarpet.new(<span class="string">"Hello World!"</span>)</span><br><span class="line">puts markdown.to_html</span><br></pre></td></tr></table></figure>
-<p>会得到下面的效果：</p>
-<p>require ‘redcarpet’<br>markdown = Redcarpet.new(“Hello World!”)<br>puts markdown.to_html</p>
-<h2 id="代码块-class（MPE-扩展的特性）"><a href="#代码块-class（MPE-扩展的特性）" class="headerlink" title="代码块 class（MPE 扩展的特性）"></a>代码块 class（MPE 扩展的特性）</h2><p>你可以给你的代码块设置 class。</p>
-<p>例如，添加 class1 class2 到一个 代码块：</p>
-<figure class="highlight javascript"><figcaption><span>&#123;.class1 .class&#125;</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">x, y</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x + y</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="代码行数"><a href="#代码行数" class="headerlink" title="代码行数"></a>代码行数</h2><p>如果你想要你的代码块显示代码行数，只要添加 line-numbers class 就可以了。</p>
-<p>例如：</p>
-<figure class="highlight javascript"><figcaption><span>&#123;.line-numbers&#125;</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="function"><span class="keyword">function</span> <span class="title">add</span>(<span class="params">x, y</span>) </span>&#123;</span><br><span class="line">  <span class="keyword">return</span> x + y</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
-
-<h2 id="高亮代码行数"><a href="#高亮代码行数" class="headerlink" title="高亮代码行数"></a>高亮代码行数</h2><p>你可以通过添加 highlight 属性的方式来高亮代码行数：</p>
-<figure class="highlight javascript"><figcaption><span>&#123;highlight</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">``</span><span class="string">`</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">`</span><span class="string">``</span>javascript &#123;highlight=<span class="number">10</span><span class="number">-20</span>&#125;</span><br></pre></td></tr></table></figure>
-
-<figure class="highlight javascript"><figcaption><span>&#123;highlight</span></figcaption><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="string">``</span><span class="string">`</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">## 任务列表</span></span><br></pre></td></tr></table></figure>
-<ul>
-<li><input checked disabled type="checkbox"> @mentions, #refs, <a href>links</a>, <strong>formatting</strong>, and <del>tags</del> supported</li>
-<li><input checked disabled type="checkbox"> list syntax required (any unordered or ordered list supported)</li>
-<li><input checked disabled type="checkbox"> this is a complete item</li>
-<li><input disabled type="checkbox"> this is an incomplete item<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">- [x] @mentions, #refs, [links](), **formatting**, and &lt;del&gt;tags&lt;&#x2F;del&gt; supported</span><br><span class="line">- [x] list syntax required (any unordered or ordered list supported)</span><br><span class="line">- [x] this is a complete item</span><br><span class="line">- [ ] this is an incomplete item</span><br><span class="line"></span><br><span class="line">## 表格</span><br></pre></td></tr></table></figure>
-First Header | Second Header</li>
-<li>———– | ————-<br>Content from cell 1 | Content from cell 2<br>Content in the first column | Content in the second column<br>```<br>First Header | Second Header</li>
-<li>———– | ————-<br>Content from cell 1 | Content from cell 2<br>Content in the first column | Content in the second column</li>
-</ul>
-
+        
+          <p class="article-more-link">
+            <a href="/2020/07/15/markdown%E8%AF%AD%E6%B3%95%E8%AE%B0%E5%BD%95/#more">Read More</a>
+          </p>
+        
       
     </div>
     <footer class="article-footer">
@@ -765,16 +404,37 @@ First Header | Second Header</li>
           <aside id="sidebar">
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a></li></ul>
+    </div>
+  </div>
 
-  
-    
 
-  
-    
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/frp/" rel="tag">frp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/" rel="tag">nginx</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/frp/" style="font-size: 10px;">frp</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">八月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a></li></ul>
     </div>
@@ -784,7 +444,7 @@ First Header | Second Header</li>
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
         
@@ -820,7 +480,7 @@ First Header | Second Header</li>
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2021 LB<br>
+      &copy; 2021 Likebard<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>

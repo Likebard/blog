@@ -7,20 +7,22 @@
   
   <title>frp+Nginx配置二级域名(http/https) | likebard&#39;s blog</title>
   <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-  <meta name="description" content="预置环境：本地和公网服务器均安装好frpc+frps服务，公网服务器安装好Nginx。已有阿里云ECS和域名 一、 阿里云官网设置 主域名解析设置添加一条解析记录，主机记录填*,记录值填ECS的ip地址，其他项默认。这个操作会设置，当访问主域名下所有二级域名时，都会被DNS解析到指定的公网服务器上来。  申请免费证书，并绑定到想用到的二级域名上。   申请完成后下载证书到本地，并且scp上传到服务">
+  <meta name="description" content="预置环境：本地和公网服务器均安装好frpc+frps服务，公网服务器安装好Nginx。已有阿里云ECS和域名">
 <meta property="og:type" content="article">
 <meta property="og:title" content="frp+Nginx配置二级域名(http&#x2F;https)">
 <meta property="og:url" content="https://likebard.github.io/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/index.html">
 <meta property="og:site_name" content="likebard&#39;s blog">
-<meta property="og:description" content="预置环境：本地和公网服务器均安装好frpc+frps服务，公网服务器安装好Nginx。已有阿里云ECS和域名 一、 阿里云官网设置 主域名解析设置添加一条解析记录，主机记录填*,记录值填ECS的ip地址，其他项默认。这个操作会设置，当访问主域名下所有二级域名时，都会被DNS解析到指定的公网服务器上来。  申请免费证书，并绑定到想用到的二级域名上。   申请完成后下载证书到本地，并且scp上传到服务">
-<meta property="og:locale" content="zh_TW">
+<meta property="og:description" content="预置环境：本地和公网服务器均安装好frpc+frps服务，公网服务器安装好Nginx。已有阿里云ECS和域名">
+<meta property="og:locale" content="zh_CN">
 <meta property="og:image" content="https://likebard.github.io/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/host.png">
 <meta property="og:image" content="https://likebard.github.io/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/aplication_ssl.png">
 <meta property="og:image" content="https://likebard.github.io/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/frps_dashboard.png">
 <meta property="og:image" content="https://likebard.github.io/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/frpc_dashboard.png">
 <meta property="article:published_time" content="2021-08-12T02:33:12.000Z">
-<meta property="article:modified_time" content="2021-08-12T06:02:51.297Z">
-<meta property="article:author" content="LB">
+<meta property="article:modified_time" content="2021-08-13T02:24:37.312Z">
+<meta property="article:author" content="Likebard">
+<meta property="article:tag" content="frp">
+<meta property="article:tag" content="nginx">
 <meta name="twitter:card" content="summary">
 <meta name="twitter:image" content="https://likebard.github.io/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/host.png">
   
@@ -62,7 +64,7 @@
         
           <a id="nav-rss-link" class="nav-icon" href="/atom.xml" title="RSS Feed"></a>
         
-        <a id="nav-search-btn" class="nav-icon" title="Search"></a>
+        <a id="nav-search-btn" class="nav-icon" title="搜索"></a>
       </nav>
       <div id="search-form-wrap">
         <form action="//google.com/search" method="get" accept-charset="UTF-8" class="search-form"><input type="search" name="q" class="search-form-input" placeholder="Search"><button type="submit" class="search-form-submit">&#xF002;</button><input type="hidden" name="sitesearch" value="https://likebard.github.io"></form>
@@ -77,6 +79,10 @@
   <time datetime="2021-08-12T02:33:12.000Z" itemprop="datePublished">2021-08-12</time>
 </a>
     
+  <div class="article-category">
+    <a class="article-category-link" href="/categories/DevOps/">DevOps</a>
+  </div>
+
   </div>
   <div class="article-inner">
     
@@ -94,6 +100,7 @@
     <div class="article-entry" itemprop="articleBody">
       
         <h2 id="预置环境："><a href="#预置环境：" class="headerlink" title="预置环境："></a>预置环境：</h2><p>本地和公网服务器均安装好frpc+frps服务，公网服务器安装好Nginx。已有阿里云ECS和域名</p>
+<a id="more"></a>
 <h2 id="一、-阿里云官网设置"><a href="#一、-阿里云官网设置" class="headerlink" title="一、 阿里云官网设置"></a>一、 阿里云官网设置</h2><ol>
 <li><p>主域名解析设置<br>添加一条解析记录，主机记录填*,记录值填ECS的ip地址，其他项默认。这个操作会设置，当访问主域名下所有二级域名时，都会被DNS解析到指定的公网服务器上来。<br><img src="/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/host.png" alt="阿里云域名解析截图"></p>
 </li>
@@ -126,6 +133,8 @@
       <a data-url="https://likebard.github.io/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/" data-id="cks8bbkcj0002icuv97xmf47k" class="article-share-link">Share</a>
       
       
+  <ul class="article-tag-list" itemprop="keywords"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/frp/" rel="tag">frp</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/nginx/" rel="tag">nginx</a></li></ul>
+
     </footer>
   </div>
   
@@ -148,16 +157,37 @@
           <aside id="sidebar">
   
     
+  <div class="widget-wrap">
+    <h3 class="widget-title">分类</h3>
+    <div class="widget">
+      <ul class="category-list"><li class="category-list-item"><a class="category-list-link" href="/categories/DevOps/">DevOps</a></li></ul>
+    </div>
+  </div>
 
-  
-    
 
-  
-    
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Archives</h3>
+    <h3 class="widget-title">标签</h3>
+    <div class="widget">
+      <ul class="tag-list" itemprop="keywords"><li class="tag-list-item"><a class="tag-list-link" href="/tags/frp/" rel="tag">frp</a></li><li class="tag-list-item"><a class="tag-list-link" href="/tags/nginx/" rel="tag">nginx</a></li></ul>
+    </div>
+  </div>
+
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">标签云</h3>
+    <div class="widget tagcloud">
+      <a href="/tags/frp/" style="font-size: 10px;">frp</a> <a href="/tags/nginx/" style="font-size: 10px;">nginx</a>
+    </div>
+  </div>
+
+  
+    
+  <div class="widget-wrap">
+    <h3 class="widget-title">归档</h3>
     <div class="widget">
       <ul class="archive-list"><li class="archive-list-item"><a class="archive-list-link" href="/archives/2021/08/">八月 2021</a></li><li class="archive-list-item"><a class="archive-list-link" href="/archives/2020/07/">七月 2020</a></li></ul>
     </div>
@@ -167,7 +197,7 @@
   
     
   <div class="widget-wrap">
-    <h3 class="widget-title">Recent Posts</h3>
+    <h3 class="widget-title">最新文章</h3>
     <div class="widget">
       <ul>
         
@@ -203,7 +233,7 @@
   
   <div class="outer">
     <div id="footer-info" class="inner">
-      &copy; 2021 LB<br>
+      &copy; 2021 Likebard<br>
       Powered by <a href="http://hexo.io/" target="_blank">Hexo</a>
     </div>
   </div>
