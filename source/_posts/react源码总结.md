@@ -36,7 +36,7 @@ React支持跨平台，不同的平台有不同的 __Renderer__，以下：
   曾经用于 __递归的无法中断的更新__ 的 __虚拟DOM__ 数据结构已经无法胜任 __异步的可中断更新__ 的需求。于是，叫做 __Fiber节点__ 的全新数据结构诞生。
 
 ## Fiber节点的结构
-```
+``` javascript
 function FiberNode(
   tag: WorkTag,
   pendingProps: mixed,

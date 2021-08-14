@@ -20,7 +20,7 @@ tags: [frp, nginx]
 
 ## 二、 frp配置
 1. 远程服务器frps.ini,添加如下配置
-```
+``` markdown
 [common]
 vhost_http_port = 4080      # frp监听Http请求的端口
 vhost_https_port = 4443     # frp监听HTTPS请求的端口
@@ -29,7 +29,7 @@ subdomain_host = test.com   # 这里填你要配置的主域名
 对于设置的4080和4443两个端口，不要忘记去阿里云ECS控制台的安全组里配置这两个端口，不然会被墙。
 
 2. 本地主机frpc.ini，添加如下配置
-```
+``` markdown
 [web]
 type = http
 local_port = 3000   # 端口号写你本地web应用的端口号
@@ -56,7 +56,7 @@ plugin_header_X-From-Where = frp
 
 ## 三、 ESC上Nginx对二级域名做配置
 针对http请求泛域名：
-```
+``` nginx
 server {
     listen 80;
     server_name *.test.com;     #这里可以使用泛二级域名，也可以像下面配置https那样，指定二级域名
@@ -72,7 +72,7 @@ server {
 ```
 
 针对https请求指定二级域名：
-```
+``` nginx
 server {
          listen 443 ssl http2;
          server_name xxx.test.com; #填写绑定证书的域名

@@ -10,7 +10,7 @@ tags: react
 
 考虑如下代码，它采用class写法:
 <!--more-->
-```
+``` jsx
 import React from "react";
 
 export default class ClassDiv extends React.Component {
@@ -45,7 +45,8 @@ export default class ClassDiv extends React.Component {
 当我们触发含有弹窗的点击事件后，在这3秒内继续对state上的count累加，当弹窗出现时，显示的是count的最新值。
 再看如下hook写法：
 
-```import { useState, useEffect } from "react";
+``` jsx
+import { useState, useEffect } from "react";
 
 export default function HookDiv() {
     const [count, setCount] = useState(0);
@@ -70,7 +71,8 @@ export default function HookDiv() {
 
 针对上述情况，假如我想在某次渲染中，拿到未来的props和state，实现跟class组件一样的效果怎么实现？那就要使用useRef,参考如下代码：
 
-```import { useState, useEffect } from "react";
+``` jsx
+import { useState, useEffect } from "react";
 
 export default function Example() {
     const [count, setCount] = useCount(0);
@@ -90,6 +92,7 @@ export default function Example() {
         <button onClick={() => {　setCount(count +１)}　}>+1</button>
     </div>
 }
+```
 
 ## 避免effect多次调用
 可以设置deps依赖项，相当于告诉react，我在effect函数中的逻辑只依赖于deps中的某个元素。此外其他的props,state发生变化后，不要执行effect

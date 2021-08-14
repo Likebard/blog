@@ -42,7 +42,7 @@ React合成事件(SyntheticEvent)是React自身的一套事件系统，它是模
 
 ## React 事件与原生事件执行顺序
 参考代码：
-```
+``` jsx
 class App extends React.Component<any, any> {
   parentRef: any;
   childRef: any;
@@ -96,7 +96,7 @@ export default App;
 * 当事件池装满时，React从事件池中复用事件对象，派发给组件。
   
 再看以下例子:
-```
+``` jsx
 function handleChange(e) {
   console.log("原始数据：", e.target)
   setTimeout(() => {
@@ -115,7 +115,7 @@ function App() {
 export default App;
 ```
 
-```
+``` jsx
 function handleChange(e) {
   setData(data => ({
     ...data,
@@ -125,7 +125,7 @@ function handleChange(e) {
 }
 ```
 在react16之前的版本，合成事件对象的事件处理函数在被调用之后，所有的属性都会被置空，所以定时器中打印的e对象的属性值全为null。如果我们想在事件函数运行完之后还获取事件对象的属性，可以使用React提供的e.persist()方法，保留所有属性,如下代码:
-```
+``` jsx
 // 只修改 handleChange 方法，其他不变
 function handleChange(e) {
   // 只增加 persist() 执行
@@ -148,7 +148,7 @@ function handleChange(e) {
 1. 不再使用事件池机制，所以不存在事件处理函数调用后，event对象上属性都被置空的问题。e.persist() 在 React 事件对象中仍然可用，只是无效果罢了。
 
 2. 事件委托的变更，不再将事件处理添加到document上，而是将事件处理渲染到React树的根DOM容器中：
-    ```
+    ``` jsx
     const rootNode = document.getElementById('root');
     ReactDOM.render(<App />, rootNode);
     ```
