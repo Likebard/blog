@@ -29,7 +29,7 @@
 
     <script src="/libs/jquery/jquery.min.js"></script>
 
-<meta name="generator" content="Hexo 4.2.1"></head>
+<meta name="generator" content="Hexo 5.4.0"></head>
 
 
 
@@ -472,13 +472,15 @@
         <hr class="clearfix">
 
         
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.css">
+        
 
         
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <ol>
-<li>语义化是什么、为什么、怎么做：<ul>
+                <h3 id="语义化是什么、为什么、怎么做："><a href="#语义化是什么、为什么、怎么做：" class="headerlink" title="语义化是什么、为什么、怎么做："></a>语义化是什么、为什么、怎么做：</h3><ul>
 <li>HTML 语义化就是：根据结构化的内容，选择合适的标签。</li>
 <li>什么要做到语义化：<ul>
 <li>有利于 SEO</li>
@@ -487,13 +489,48 @@
 <li>更好的 accessibility，方便任何设备解析（如盲人阅读器）</li>
 </ul>
 </li>
-<li>如何做到语义化：实时跟进、学习并使用语义化标签。  <figure class="highlight javascript"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">if</span> (导航) &#123;</span><br><span class="line"><span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">nav</span> /&gt;</span></span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (文稿内容、博客内容、评论内容...包含标题元素的内容) &#123;</span><br><span class="line"><span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">article</span> /&gt;</span></span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (目录抽象、边栏、广告、批注) &#123;</span><br><span class="line"><span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">aside</span> /&gt;</span></span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (含有附录、图片、代码、图形) &#123;</span><br><span class="line"><span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">figure</span> /&gt;</span></span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (含有多个标题或内容的区块) &#123;</span><br><span class="line"><span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">section</span> /&gt;</span></span></span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> <span class="keyword">if</span> (含有段落、语法意义) &#123;</span><br><span class="line"><span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">p</span> /&gt;</span></span> || <span class="xml"><span class="tag">&lt;<span class="name">address</span> /&gt;</span></span> || <span class="xml"><span class="tag">&lt;<span class="name">blockquote</span> /&gt;</span></span> || <span class="xml"><span class="tag">&lt;<span class="name">pre</span> /&gt;</span></span> || ...</span><br><span class="line">&#125;</span><br><span class="line"><span class="keyword">else</span> &#123;</span><br><span class="line"><span class="keyword">return</span> <span class="xml"><span class="tag">&lt;<span class="name">div</span> /&gt;</span></span></span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure></li>
+<li>如何做到语义化：实时跟进、学习并使用语义化标签。  <pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">if</span> <span class="token punctuation">(</span>导航<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+<span class="token keyword">return</span> <span class="token operator">&lt;</span>nav <span class="token operator">/</span><span class="token operator">></span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>文稿内容、博客内容、评论内容<span class="token operator">...</span>包含标题元素的内容<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+<span class="token keyword">return</span> <span class="token operator">&lt;</span>article <span class="token operator">/</span><span class="token operator">></span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>目录抽象、边栏、广告、批注<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+<span class="token keyword">return</span> <span class="token operator">&lt;</span>aside <span class="token operator">/</span><span class="token operator">></span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>含有附录、图片、代码、图形<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+<span class="token keyword">return</span> <span class="token operator">&lt;</span>figure <span class="token operator">/</span><span class="token operator">></span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>含有多个标题或内容的区块<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+<span class="token keyword">return</span> <span class="token operator">&lt;</span>section <span class="token operator">/</span><span class="token operator">></span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">else</span> <span class="token keyword">if</span> <span class="token punctuation">(</span>含有段落、语法意义<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+<span class="token keyword">return</span> <span class="token operator">&lt;</span>p <span class="token operator">/</span><span class="token operator">></span> <span class="token operator">||</span> <span class="token operator">&lt;</span>address <span class="token operator">/</span><span class="token operator">></span> <span class="token operator">||</span> <span class="token operator">&lt;</span>blockquote <span class="token operator">/</span><span class="token operator">></span> <span class="token operator">||</span> <span class="token operator">&lt;</span>pre <span class="token operator">/</span><span class="token operator">></span> <span class="token operator">||</span> <span class="token operator">...</span>
+<span class="token punctuation">&#125;</span>
+<span class="token keyword">else</span> <span class="token punctuation">&#123;</span>
+<span class="token keyword">return</span> <span class="token operator">&lt;</span>div <span class="token operator">/</span><span class="token operator">></span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="BFC："><a href="#BFC：" class="headerlink" title="BFC："></a>BFC：</h3><h4 id="Box-css布局的基本单位"><a href="#Box-css布局的基本单位" class="headerlink" title="Box: css布局的基本单位"></a>Box: css布局的基本单位</h4>Box 是 CSS 布局的对象和基本单位， 直观点来说，就是一个页面是由很多个 Box 组成的。元素的类型和 display 属性，决定了这个 Box 的类型。 不同类型的 Box， 会参与不同的 Formatting Context（一个决定如何渲染文档的容器），因此Box内的元素会以不同的方式渲染。让我们看看有哪些盒子：</li>
+<li>block-level box:display 属性为 block, list-item, table 的元素，会生成 block-level box。并且参与 block fomatting context</li>
+<li>inline-level box:display 属性为 inline, inline-block, inline-table 的元素，会生成 inline-level box。并且参与 inline formatting context；</li>
+<li>CSS3 规范中又加入了 run in box, 以后再研究。</li>
 </ul>
-</li>
-<li>BFC是什么<ul>
-<li>BFC 是 Block Formatting Context 的简写，我们可以直接翻译成“块级格式化上下文”。它会创建一个特殊的区域，在这个区域中，只有 block box 参与布局。</li>
-</ul>
-</li>
+<h4 id="Formatting-Context"><a href="#Formatting-Context" class="headerlink" title="Formatting Context"></a>Formatting Context</h4><p>Formatting context 是 W3C CSS2.1 规范中的一个概念。它是页面中的一块渲染区域，并且有一套渲染规则，它决定了其子元素将如何定位，以及和其他元素的关系和相互作用。最常见的 Formatting context 有 Block fomatting context (简称BFC)和 Inline formatting context (简称IFC)。</p>
+<h4 id="BFC-是什么"><a href="#BFC-是什么" class="headerlink" title="BFC 是什么"></a>BFC 是什么</h4><pre><code>- BFC 是 Block Formatting Context 的简写，我们可以直接翻译成“块级格式化上下文”。BFC是一个独立的布局环境，其中的元素布局是不受外界的影响，并且在一个BFC中，块盒与行盒（行盒由一行中所有的内联元素所组成）都会垂直的沿着其父元素的边框排列。</code></pre><h4 id="如何形成BFC"><a href="#如何形成BFC" class="headerlink" title="如何形成BFC"></a>如何形成BFC</h4><ol>
+<li>float的值不是none。</li>
+<li>position的值不是static或者relative。</li>
+<li>display的值是inline-block、table-cell、flex、table-caption或者inline-flex</li>
+<li>overflow的值不是visible</li>
+</ol>
+<h4 id="BFC的作用"><a href="#BFC的作用" class="headerlink" title="BFC的作用"></a>BFC的作用</h4><ol>
+<li>利用BFC避免margin重叠<br>考虑如下结构：<pre class="line-numbers language-none"><code class="language-none">&lt;body&gt;
+    &lt;p&gt;看看我的 margin是多少&lt;&#x2F;p&gt;
+    &lt;p&gt;看看我的 margin是多少&lt;&#x2F;p&gt;
+&lt;&#x2F;body&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+假如我们给两个p都设置上margin，那么属于同一个BFC的两个相邻的Box会发生margin重叠。所以我们可以设置，两个不同的BFC。也就是我们可以把第二个p用div包起来，然后激活它使其成为一个BFC<pre class="line-numbers language-none"><code class="language-none">&lt;p&gt;看看我的 margin是多少&lt;&#x2F;p&gt;
+&lt;div&gt;
+    &lt;p&gt;看看我的 margin是多少&lt;&#x2F;p&gt;
+&lt;&#x2F;div&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ol>
 
                 
