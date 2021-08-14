@@ -516,21 +516,22 @@
 <li>CSS3 规范中又加入了 run in box, 以后再研究。</li>
 </ul>
 <h4 id="Formatting-Context"><a href="#Formatting-Context" class="headerlink" title="Formatting Context"></a>Formatting Context</h4><p>Formatting context 是 W3C CSS2.1 规范中的一个概念。它是页面中的一块渲染区域，并且有一套渲染规则，它决定了其子元素将如何定位，以及和其他元素的关系和相互作用。最常见的 Formatting context 有 Block fomatting context (简称BFC)和 Inline formatting context (简称IFC)。</p>
-<h4 id="BFC-是什么"><a href="#BFC-是什么" class="headerlink" title="BFC 是什么"></a>BFC 是什么</h4><pre><code>- BFC 是 Block Formatting Context 的简写，我们可以直接翻译成“块级格式化上下文”。BFC是一个独立的布局环境，其中的元素布局是不受外界的影响，并且在一个BFC中，块盒与行盒（行盒由一行中所有的内联元素所组成）都会垂直的沿着其父元素的边框排列。</code></pre><h4 id="如何形成BFC"><a href="#如何形成BFC" class="headerlink" title="如何形成BFC"></a>如何形成BFC</h4><ol>
+<h4 id="BFC-是什么"><a href="#BFC-是什么" class="headerlink" title="BFC 是什么"></a>BFC 是什么</h4><p>BFC 是 Block Formatting Context 的简写，我们可以直接翻译成“块级格式化上下文”。BFC是一个独立的布局环境，其中的元素布局是不受外界的影响，并且在一个BFC中，块盒与行盒（行盒由一行中所有的内联元素所组成）都会垂直的沿着其父元素的边框排列。</p>
+<h4 id="如何形成BFC"><a href="#如何形成BFC" class="headerlink" title="如何形成BFC"></a>如何形成BFC</h4><ol>
 <li>float的值不是none。</li>
 <li>position的值不是static或者relative。</li>
 <li>display的值是inline-block、table-cell、flex、table-caption或者inline-flex</li>
 <li>overflow的值不是visible</li>
 </ol>
 <h4 id="BFC的作用"><a href="#BFC的作用" class="headerlink" title="BFC的作用"></a>BFC的作用</h4><ol>
-<li>利用BFC避免margin重叠<br>考虑如下结构：<pre class="line-numbers language-none"><code class="language-none">&lt;body&gt;
-    &lt;p&gt;看看我的 margin是多少&lt;&#x2F;p&gt;
-    &lt;p&gt;看看我的 margin是多少&lt;&#x2F;p&gt;
-&lt;&#x2F;body&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-假如我们给两个p都设置上margin，那么属于同一个BFC的两个相邻的Box会发生margin重叠。所以我们可以设置，两个不同的BFC。也就是我们可以把第二个p用div包起来，然后激活它使其成为一个BFC<pre class="line-numbers language-none"><code class="language-none">&lt;p&gt;看看我的 margin是多少&lt;&#x2F;p&gt;
-&lt;div&gt;
-    &lt;p&gt;看看我的 margin是多少&lt;&#x2F;p&gt;
-&lt;&#x2F;div&gt;<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></li>
+<li>利用BFC避免margin重叠<br>考虑如下结构：<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>body</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>看看我的 margin是多少<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>看看我的 margin是多少<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>body</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+假如我们给两个p都设置上margin，那么属于同一个BFC的两个相邻的Box会发生margin重叠。所以我们可以设置，两个不同的BFC。也就是我们可以把第二个p用div包起来，然后激活它使其成为一个BFC<pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>看看我的 margin是多少<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>div</span><span class="token punctuation">></span></span>
+    <span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>p</span><span class="token punctuation">></span></span>看看我的 margin是多少<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>p</span><span class="token punctuation">></span></span>
+<span class="token tag"><span class="token tag"><span class="token punctuation">&lt;/</span>div</span><span class="token punctuation">></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre></li>
 </ol>
 
                 
