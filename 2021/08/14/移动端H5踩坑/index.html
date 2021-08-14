@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="frp+Nginx配置二级域名(http/https), likebard&#39;s blog">
+    <meta name="keywords" content="移动端H5踩坑, likebard&#39;s blog">
     <meta name="description" content="好记性不如烂笔头">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -16,7 +16,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>frp+Nginx配置二级域名(http/https) | likebard&#39;s blog</title>
+    <title>移动端H5踩坑 | likebard&#39;s blog</title>
     <link rel="icon" type="image/png" href="/favicon.png">
 
     <link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.css">
@@ -310,12 +310,12 @@
 
 
 
-<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/2.jpg')">
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/9.jpg')">
     <div class="container" style="right: 0px;left: 0px;">
         <div class="row">
             <div class="col s12 m12 l12">
                 <div class="brand">
-                    <h1 class="description center-align post-title">frp+Nginx配置二级域名(http/https)</h1>
+                    <h1 class="description center-align post-title">移动端H5踩坑</h1>
                 </div>
             </div>
         </div>
@@ -431,12 +431,12 @@
                     
                     <div class="article-tag">
                         
-                            <a href="/tags/frp/">
-                                <span class="chip bg-color">frp</span>
+                            <a href="/tags/%E5%85%AB%E8%82%A1/">
+                                <span class="chip bg-color">八股</span>
                             </a>
                         
-                            <a href="/tags/nginx/">
-                                <span class="chip bg-color">nginx</span>
+                            <a href="/tags/h5/">
+                                <span class="chip bg-color">h5</span>
                             </a>
                         
                     </div>
@@ -447,8 +447,8 @@
                     <div class="post-cate">
                         <i class="fas fa-bookmark fa-fw icon-category"></i>
                         
-                            <a href="/categories/DevOps/" class="post-category">
-                                DevOps
+                            <a href="/categories/%E9%9D%A2%E8%AF%95/" class="post-category">
+                                面试
                             </a>
                         
                     </div>
@@ -460,7 +460,7 @@
                 
                 <div class="post-date info-break-policy">
                     <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
-                    2021-08-12
+                    2021-08-14
                 </div>
                 
 
@@ -484,84 +484,54 @@
 
         <div class="card-content article-card-content">
             <div id="articleContent">
-                <h2 id="预置环境："><a href="#预置环境：" class="headerlink" title="预置环境："></a>预置环境：</h2><p>本地和公网服务器均安装好frpc+frps服务，公网服务器安装好Nginx。已有阿里云ECS和域名</p>
-<span id="more"></span>
-<h2 id="一、-阿里云官网设置"><a href="#一、-阿里云官网设置" class="headerlink" title="一、 阿里云官网设置"></a>一、 阿里云官网设置</h2><ol>
-<li><p>主域名解析设置<br>添加一条解析记录，主机记录填*,记录值填ECS的ip地址，其他项默认。这个操作会设置，当访问主域名下所有二级域名时，都会被DNS解析到指定的公网服务器上来。<br><img src="/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/host.png" alt="阿里云域名解析截图"></p>
-</li>
-<li><p>申请免费证书，并绑定到想用到的二级域名上。<br><img src="/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/aplication_ssl.png" alt="申请ssl截图"></p>
-</li>
-</ol>
-<p>申请完成后下载证书到本地，并且scp上传到服务器一份。注意因为后续要用nginx，所以下载的证书选择Nginx类型。</p>
-<h2 id="二、-frp配置"><a href="#二、-frp配置" class="headerlink" title="二、 frp配置"></a>二、 frp配置</h2><ol>
-<li><p>远程服务器frps.ini,添加如下配置</p>
-<pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">[common]
-vhost_http_port = 4080      # frp监听Http请求的端口
-vhost_https_port = 4443     # frp监听HTTPS请求的端口
-subdomain_host = test.com   # 这里填你要配置的主域名<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
-<p>对于设置的4080和4443两个端口，不要忘记去阿里云ECS控制台的安全组里配置这两个端口，不然会被墙。</p>
-</li>
-<li><p>本地主机frpc.ini，添加如下配置</p>
-<pre class="line-numbers language-markdown" data-language="markdown"><code class="language-markdown">[web]
-type = http
-local_port = 3000   # 端口号写你本地web应用的端口号
-subdomain = xxx     # 这里写上你的子域名，到时候在浏览器可以输入xxx.test.com来访问你的内网应用
+                <h3 id="移动端的300ms点击延迟及点击穿透现象"><a href="#移动端的300ms点击延迟及点击穿透现象" class="headerlink" title="移动端的300ms点击延迟及点击穿透现象"></a>移动端的300ms点击延迟及点击穿透现象</h3><p>这是由于历史原因造成的，一般解决手段为禁止混用 touch 和 click，或者增加一层“透明”蒙层，也可以通过延迟上层元素消失来实现。还可以引入fastclick库</p>
+<h3 id="点击元素禁止产生背景或边框"><a href="#点击元素禁止产生背景或边框" class="headerlink" title="点击元素禁止产生背景或边框"></a>点击元素禁止产生背景或边框</h3><pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token property">-webkit-tap-highlight-color</span><span class="token punctuation">:</span> <span class="token function">rgba</span><span class="token punctuation">(</span>0<span class="token punctuation">,</span>0<span class="token punctuation">,</span>0<span class="token punctuation">,</span>0<span class="token punctuation">)</span><span class="token punctuation">;</span> <span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<h3 id="禁止长按链接与图片弹出菜单"><a href="#禁止长按链接与图片弹出菜单" class="headerlink" title="禁止长按链接与图片弹出菜单"></a>禁止长按链接与图片弹出菜单</h3><pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token property">-webkit-touch-callout</span><span class="token punctuation">:</span> none<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-[webs]
-type = https
-local_port = 3000
-subdomain = xxx
+<h3 id="禁止用户选中文字"><a href="#禁止用户选中文字" class="headerlink" title="禁止用户选中文字"></a>禁止用户选中文字</h3><pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token property">-webkit-user-select</span><span class="token punctuation">:</span>none<span class="token punctuation">;</span> 
+<span class="token property">user-select</span><span class="token punctuation">:</span> none<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
-plugin = https2http
-plugin_local_addr = 127.0.0.1:3000
+<h3 id="取消-input-输入时，英文首字母的默认大写"><a href="#取消-input-输入时，英文首字母的默认大写" class="headerlink" title="取消 input 输入时，英文首字母的默认大写"></a>取消 input 输入时，英文首字母的默认大写</h3><pre class="line-numbers language-html" data-language="html"><code class="language-html"><span class="token tag"><span class="token tag"><span class="token punctuation">&lt;</span>input</span> <span class="token attr-name">autocapitalize</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>off<span class="token punctuation">"</span></span> <span class="token attr-name">autocorrect</span><span class="token attr-value"><span class="token punctuation attr-equals">=</span><span class="token punctuation">"</span>off<span class="token punctuation">"</span></span> <span class="token punctuation">/></span></span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-<span class="token title important"><span class="token punctuation">#</span> HTTPS证书相关的配置</span>
-plugin_crt_path = /Users/likebard/program/cert.pem  # 这里使用下载到本地的公钥路径
-plugin_key_path = /Users/likebard/program/cert.key  # 下载到本地的私钥路径
-plugin_host_header_rewrite = 127.0.0.1
-plugin_header_X-From-Where = frp<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</li>
-<li><p>配置完成后，重启frpc服务，访问Client端和Server端的dashboard，如果看见的结果和以下截图一样，说明配置成功。<br><img src="/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/frps_dashboard.png" alt="frps管理界面"><br><img src="/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/frpc_dashboard.png" alt="frpc管理界面"></p>
-</li>
-</ol>
-<h2 id="三、-ESC上Nginx对二级域名做配置"><a href="#三、-ESC上Nginx对二级域名做配置" class="headerlink" title="三、 ESC上Nginx对二级域名做配置"></a>三、 ESC上Nginx对二级域名做配置</h2><p>针对http请求泛域名：</p>
-<pre class="line-numbers language-nginx" data-language="nginx"><code class="language-nginx"><span class="token directive"><span class="token keyword">server</span></span> <span class="token punctuation">&#123;</span>
-    <span class="token directive"><span class="token keyword">listen</span> <span class="token number">80</span></span><span class="token punctuation">;</span>
-    <span class="token directive"><span class="token keyword">server_name</span> *.test.com</span><span class="token punctuation">;</span>     <span class="token comment">#这里可以使用泛二级域名，也可以像下面配置https那样，指定二级域名</span>
-    <span class="token directive"><span class="token keyword">location</span> /</span> <span class="token punctuation">&#123;</span>
-        <span class="token directive"><span class="token keyword">proxy_pass</span> http://127.0.0.1:4080</span><span class="token punctuation">;</span>   <span class="token comment"># 这是要走80端口后要代理的端口，填上frps监听http请求的端口</span>
-        <span class="token directive"><span class="token keyword">proxy_set_header</span>    Host            <span class="token variable">$host</span>:80</span><span class="token punctuation">;</span>
-        <span class="token directive"><span class="token keyword">proxy_set_header</span>    X-Real-IP       <span class="token variable">$remote_addr</span></span><span class="token punctuation">;</span>
-        <span class="token directive"><span class="token keyword">proxy_set_header</span>    X-Forwarded-For <span class="token variable">$proxy_add_x_forwarded_for</span></span><span class="token punctuation">;</span>
-        <span class="token directive"><span class="token keyword">proxy_hide_header</span>   X-Powered-By</span><span class="token punctuation">;</span>
+<h3 id="fixed在ios下定位问题："><a href="#fixed在ios下定位问题：" class="headerlink" title="fixed在ios下定位问题："></a>fixed在ios下定位问题：</h3><p>比如软键盘弹出时，某些情况下，会影响 fixed 元素定位；配合使用 transform、translate 时，某些情况下，也会影响 fixed 元素定位。一般解决方案是模拟 fixed 定位，或者使用 iScroll 库。</p>
+<h3 id="怎么让-Chrome-支持小于-12px-的文字？"><a href="#怎么让-Chrome-支持小于-12px-的文字？" class="headerlink" title="怎么让 Chrome 支持小于 12px 的文字？"></a>怎么让 Chrome 支持小于 12px 的文字？</h3><pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token property">-webkit-text-size-adjust</span><span class="token punctuation">:</span>none<span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
 
-    <span class="token punctuation">&#125;</span>
-<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="iOS-下-webview-中，局部滚动很卡"><a href="#iOS-下-webview-中，局部滚动很卡" class="headerlink" title="iOS 下 webview 中，局部滚动很卡"></a>iOS 下 webview 中，局部滚动很卡</h3><p>Android 下直接正常设置 CSS overflow: auto（或 scroll）即可，但 iOS 下滚动起来依旧不流畅，且手指移开屏幕后，滚动立刻停止，没有全局滚动时的惯性滚动效果。iOS 上还需要增加一个私有的 CSS 属性，以达到流畅滚动。所以，想让局部滚动流畅，需给滚动元素上添加如下的 CSS：</p>
+<pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token property">overflow</span><span class="token punctuation">:</span> auto<span class="token punctuation">;</span>
+<span class="token property">-webkit-overflow-scrolling</span><span class="token punctuation">:</span> touch<span class="token punctuation">;</span> <span class="token comment">/* iOS 需要 */</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
 
-<p>针对https请求指定二级域名：</p>
-<pre class="line-numbers language-nginx" data-language="nginx"><code class="language-nginx"><span class="token directive"><span class="token keyword">server</span></span> <span class="token punctuation">&#123;</span>
-         <span class="token directive"><span class="token keyword">listen</span> <span class="token number">443</span> ssl http2</span><span class="token punctuation">;</span>
-         <span class="token directive"><span class="token keyword">server_name</span> xxx.test.com</span><span class="token punctuation">;</span> <span class="token comment">#填写绑定证书的域名</span>
+<h3 id="粘性定位"><a href="#粘性定位" class="headerlink" title="粘性定位"></a>粘性定位</h3><p>所谓粘性定位问题是：某块内容起初在页面的中部，但随着页面的滚动，到达顶端时，吸附在顶部，不继续滚动。解决此问题更好的方案是使用 CSS3 中新增的定位属性 position: sticky，专门用于解决此类问题。但测试下来发现，iOS 下支持的很好（网上说 iOS 6 开始支持），但 Android 下，低版本的 webview 不支持，所以需要做兼容处理，</p>
+<pre class="line-numbers language-js" data-language="js"><code class="language-js"><span class="token comment">// 给待粘性定位的元素添加如下样式：</span>
+position<span class="token operator">:</span> <span class="token operator">-</span>webkit<span class="token operator">-</span>sticky<span class="token punctuation">;</span>
+position<span class="token operator">:</span> sticky<span class="token punctuation">;</span>
 
-         <span class="token directive"><span class="token keyword">ssl_certificate</span> cert/cert.pem</span><span class="token punctuation">;</span>
-         <span class="token directive"><span class="token keyword">ssl_certificate_key</span> cert/cert.key</span><span class="token punctuation">;</span>
-         <span class="token directive"><span class="token keyword">ssl_session_timeout</span> <span class="token number">5m</span></span><span class="token punctuation">;</span>
-         <span class="token directive"><span class="token keyword">ssl_ciphers</span> ECDHE-RSA-AES128-GCM-SHA256:ECDHE:ECDH:AES:HIGH:!NULL:!aNULL:!MD5:!ADH:!RC4</span><span class="token punctuation">;</span> <span class="token comment">#使用此加密套件。</span>
-         <span class="token directive"><span class="token keyword">ssl_protocols</span> TLSv1 TLSv1.1 TLSv1.2 TLSv1.3</span><span class="token punctuation">;</span> <span class="token comment">#使用该协议进行配置。</span>
-         <span class="token directive"><span class="token keyword">ssl_prefer_server_ciphers</span> <span class="token boolean">on</span></span><span class="token punctuation">;</span>
-         <span class="token directive"><span class="token keyword">location</span> /</span> <span class="token punctuation">&#123;</span>
-             <span class="token directive"><span class="token keyword">proxy_pass</span> http://127.0.0.1:4080</span><span class="token punctuation">;</span>
-             <span class="token directive"><span class="token keyword">proxy_ssl_server_name</span> <span class="token boolean">on</span></span><span class="token punctuation">;</span>
-             <span class="token directive"><span class="token keyword">proxy_redirect</span> <span class="token boolean">off</span></span><span class="token punctuation">;</span>
+<span class="token comment">// 同时提供特性检测代码，检查是否支持粘性布局：</span>
+<span class="token keyword">function</span> <span class="token function">isSupportSticky</span><span class="token punctuation">(</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token keyword">var</span> prefixList <span class="token operator">=</span> <span class="token punctuation">[</span><span class="token string">''</span><span class="token punctuation">,</span> <span class="token string">'-webkit-'</span><span class="token punctuation">]</span><span class="token punctuation">;</span>
+  <span class="token keyword">var</span> stickyText <span class="token operator">=</span> <span class="token string">''</span><span class="token punctuation">;</span>
+  <span class="token keyword">for</span> <span class="token punctuation">(</span><span class="token keyword">var</span> i <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span> i <span class="token operator">&lt;</span> prefixList<span class="token punctuation">.</span>length<span class="token punctuation">;</span> i<span class="token operator">++</span><span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+      stickyText <span class="token operator">+=</span> <span class="token string">'position:'</span> <span class="token operator">+</span> prefixList<span class="token punctuation">[</span>i<span class="token punctuation">]</span> <span class="token operator">+</span> <span class="token string">'sticky;'</span><span class="token punctuation">;</span>
+  <span class="token punctuation">&#125;</span>
+  <span class="token keyword">var</span> div <span class="token operator">=</span> document<span class="token punctuation">.</span><span class="token function">createElement</span><span class="token punctuation">(</span><span class="token string">'div'</span><span class="token punctuation">)</span><span class="token punctuation">;</span>
+  div<span class="token punctuation">.</span>style<span class="token punctuation">.</span>cssText <span class="token operator">=</span> <span class="token string">'display:none;'</span> <span class="token operator">+</span> stickyText<span class="token punctuation">;</span>
+  document<span class="token punctuation">.</span>body<span class="token punctuation">.</span><span class="token function">appendChild</span><span class="token punctuation">(</span>div<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  <span class="token keyword">var</span> isSupport <span class="token operator">=</span> <span class="token regex"><span class="token regex-delimiter">/</span><span class="token regex-source language-regex">sticky</span><span class="token regex-delimiter">/</span><span class="token regex-flags">i</span></span><span class="token punctuation">.</span><span class="token function">test</span><span class="token punctuation">(</span>window<span class="token punctuation">.</span><span class="token function">getComputedStyle</span><span class="token punctuation">(</span>div<span class="token punctuation">)</span><span class="token punctuation">.</span>position<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  document<span class="token punctuation">.</span>body<span class="token punctuation">.</span><span class="token function">removeChild</span><span class="token punctuation">(</span>div<span class="token punctuation">)</span><span class="token punctuation">;</span>
+  div <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+  <span class="token keyword">return</span> isSupport<span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span>
 
-             <span class="token directive"><span class="token keyword">proxy_set_header</span> X-Real-IP <span class="token variable">$remote_addr</span></span><span class="token punctuation">;</span>
-             <span class="token directive"><span class="token keyword">proxy_set_header</span> X-Forwarded-For <span class="token variable">$proxy_add_x_forwarded_for</span></span><span class="token punctuation">;</span>
-             <span class="token directive"><span class="token keyword">proxy_set_header</span> X-Forwarded-Proto <span class="token variable">$scheme</span></span><span class="token punctuation">;</span>
-             <span class="token directive"><span class="token keyword">proxy_set_header</span> Host <span class="token variable">$host</span></span><span class="token punctuation">;</span>
-         <span class="token punctuation">&#125;</span>
- <span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<span class="token comment">// 针对不支持的场景，注册滚动事件处理</span>
+element<span class="token punctuation">.</span><span class="token function">addEventListener</span><span class="token punctuation">(</span><span class="token string">'scroll'</span><span class="token punctuation">,</span> callback<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
-<h2 id="最终"><a href="#最终" class="headerlink" title="最终"></a>最终</h2><p>重启nginx之后,打开Chrome，就能通过二级域名访问内网web应用了！由于Nginx里配置了proxy_pass代理，因此不需要带上端口号，可以直接访问应用。<br>我们来梳理一下整个工作流程： 访问https://***.test.com时，之前配置过的dns解析能确保请求到达指定的阿里云ECS上， ECS上的Nginx会根据配置的子域名，来判断应该使用哪一套ssl证书，并转发到ECS指定的端口上（在本文中是4080端口）。4080端口上有frps的监听服务,frps会根据请求的二级域名，去配置表中遍历所有挂载的二级域名，命中后就找到了内网服务器，利用NAT映射，最终访问到我们指定的内网web应用上。</p>
+<h3 id="babel-polyfill-对-Promise-的封装有-bug"><a href="#babel-polyfill-对-Promise-的封装有-bug" class="headerlink" title="babel-polyfill 对 Promise 的封装有 bug"></a>babel-polyfill 对 Promise 的封装有 bug</h3><p>解决方案是用 bluebird 替换 babel-polyfill 中的 Promise 实现。bluebird 号称是性能最好的 Promise 实现，甚至比原生的实现性能还要好（对此说法有疑惑，持保留态度）。</p>
+<h3 id="css动画页面闪白，动画卡顿"><a href="#css动画页面闪白，动画卡顿" class="headerlink" title="css动画页面闪白，动画卡顿"></a>css动画页面闪白，动画卡顿</h3><p>解决方法:<br>1.尽可能地使用合成属性transform和opacity来设计CSS3动画，不使用position的left和top来定位<br>2.开启硬件加速  </p>
+<pre class="line-numbers language-css" data-language="css"><code class="language-css"><span class="token property">-webkit-transform</span><span class="token punctuation">:</span> <span class="token function">translate3d</span><span class="token punctuation">(</span>0<span class="token punctuation">,</span> 0<span class="token punctuation">,</span> 0<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token property">-moz-transform</span><span class="token punctuation">:</span> <span class="token function">translate3d</span><span class="token punctuation">(</span>0<span class="token punctuation">,</span> 0<span class="token punctuation">,</span> 0<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token property">-ms-transform</span><span class="token punctuation">:</span> <span class="token function">translate3d</span><span class="token punctuation">(</span>0<span class="token punctuation">,</span> 0<span class="token punctuation">,</span> 0<span class="token punctuation">)</span><span class="token punctuation">;</span>
+<span class="token property">transform</span><span class="token punctuation">:</span> <span class="token function">translate3d</span><span class="token punctuation">(</span>0<span class="token punctuation">,</span> 0<span class="token punctuation">,</span> 0<span class="token punctuation">)</span><span class="token punctuation">;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+
+<h3 id="适配方案"><a href="#适配方案" class="headerlink" title="适配方案"></a>适配方案</h3><p>vw设置根字体大小，webpack配置px转rem插件</p>
 
                 
             </div>
@@ -588,7 +558,7 @@ plugin_header_X-From-Where = frp<span aria-hidden="true" class="line-numbers-row
                     </i>
                 </span>
                 <span class="reprint-info">
-                    <a href="https://likebard.github.io/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/">https://likebard.github.io/2021/08/12/frp%E9%85%8D%E7%BD%AE%E4%BA%8C%E7%BA%A7%E5%9F%9F%E5%90%8D/</a>
+                    <a href="https://likebard.github.io/2021/08/14/%E7%A7%BB%E5%8A%A8%E7%AB%AFH5%E8%B8%A9%E5%9D%91/">https://likebard.github.io/2021/08/14/%E7%A7%BB%E5%8A%A8%E7%AB%AFH5%E8%B8%A9%E5%9D%91/</a>
                 </span>
             </div>
             <div class="reprint__notice">
@@ -626,12 +596,12 @@ plugin_header_X-From-Where = frp<span aria-hidden="true" class="line-numbers-row
                     
                         <div class="article-tag">
                             
-                                <a href="/tags/frp/">
-                                    <span class="chip bg-color">frp</span>
+                                <a href="/tags/%E5%85%AB%E8%82%A1/">
+                                    <span class="chip bg-color">八股</span>
                                 </a>
                             
-                                <a href="/tags/nginx/">
-                                    <span class="chip bg-color">nginx</span>
+                                <a href="/tags/h5/">
+                                    <span class="chip bg-color">h5</span>
                                 </a>
                             
                         </div>
@@ -803,9 +773,64 @@ plugin_header_X-From-Where = frp<span aria-hidden="true" class="line-numbers-row
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2021/08/14/%E7%A7%BB%E5%8A%A8%E7%AB%AFH5%E8%B8%A9%E5%9D%91/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/9.jpg" class="responsive-img" alt="移动端H5踩坑">
+                        
+                        <span class="card-title">移动端H5踩坑</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-08-14
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/%E9%9D%A2%E8%AF%95/" class="post-category">
+                                    面试
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/%E5%85%AB%E8%82%A1/">
+                        <span class="chip bg-color">八股</span>
+                    </a>
+                    
+                    <a href="/tags/h5/">
+                        <span class="chip bg-color">h5</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
             <div class="card">
                 <a href="/2021/08/13/HTML-CSS%E9%9D%A2%E8%AF%95%E9%A2%98/">
                     <div class="card-image">
@@ -823,9 +848,9 @@ plugin_header_X-From-Where = frp<span aria-hidden="true" class="line-numbers-row
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2021-08-13
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2021-08-13
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
@@ -843,55 +868,6 @@ plugin_header_X-From-Where = frp<span aria-hidden="true" class="line-numbers-row
                     
                     <a href="/tags/%E5%85%AB%E8%82%A1/">
                         <span class="chip bg-color">八股</span>
-                    </a>
-                    
-                </div>
-                
-            </div>
-        </div>
-        
-        
-        <div class="article col s12 m6" data-aos="fade-up">
-            <div class="article-badge right-badge text-color">
-                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
-            </div>
-            <div class="card">
-                <a href="/2021/03/13/react%E6%BA%90%E7%A0%81%E6%80%BB%E7%BB%93/">
-                    <div class="card-image">
-                        
-                        
-                        <img src="/medias/featureimages/0.jpg" class="responsive-img" alt="react源码总结">
-                        
-                        <span class="card-title">react源码总结</span>
-                    </div>
-                </a>
-                <div class="card-content article-content">
-                    <div class="summary block-with-text">
-                        
-                            Reconciler:每当更新发生时， Reconciler 会做如下工作：
-
-调用函数组件、或class组件的render方法，将返回的JSX转为虚拟DOM。
-将本次虚拟DOM跟上次的对比，根据Diff算法找出变化的部分。
-通知 Rend
-                        
-                    </div>
-                    <div class="publish-info">
-                            <span class="publish-date">
-                                <i class="far fa-clock fa-fw icon-date"></i>2021-03-13
-                            </span>
-                        <span class="publish-author">
-                            
-                            <i class="fas fa-user fa-fw"></i>
-                            Likebard
-                            
-                        </span>
-                    </div>
-                </div>
-                
-                <div class="card-action article-tags">
-                    
-                    <a href="/tags/react/">
-                        <span class="chip bg-color">react</span>
                     </a>
                     
                 </div>
