@@ -482,7 +482,7 @@
 <li>ReactDOM</li>
 <li>ReactNative</li>
 <li>ReactTest</li>
-<li>ReactArt<br>每次更新发生时，Renderer接到Reconciler通知，将变化的组件渲染在当前宿主环境。<a id="more"></a>
+<li>ReactArt<br>每次更新发生时，Renderer接到Reconciler通知，将变化的组件渲染在当前宿主环境。<span id="more"></span>
 <h2 id="React15架构–-gt-React16架构"><a href="#React15架构–-gt-React16架构" class="headerlink" title="React15架构–&gt;React16架构"></a>React15架构–&gt;React16架构</h2></li>
 </ul>
 <ol>
@@ -505,7 +505,53 @@
 <li>Reconciler的改变：<br>从递归处理虚拟Dom变成了可以中断的循环过程。只有所有组件都完成Reconciler的工作，才会统一交给Renderer，而不是交替工作。由于Reconciler的所有工作都在内存中进行，所以即使反复中断，用户也不会看见更新不完全的DOM。</li>
 <li>React Element数据结构的改变:<br>曾经用于 <strong>递归的无法中断的更新</strong> 的 <strong>虚拟DOM</strong> 数据结构已经无法胜任 <strong>异步的可中断更新</strong> 的需求。于是，叫做 <strong>Fiber节点</strong> 的全新数据结构诞生。</li>
 </ul>
-<h2 id="Fiber节点的结构"><a href="#Fiber节点的结构" class="headerlink" title="Fiber节点的结构"></a>Fiber节点的结构</h2><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br></pre></td><td class="code"><pre><span class="line">function FiberNode(</span><br><span class="line">  tag: WorkTag,</span><br><span class="line">  pendingProps: mixed,</span><br><span class="line">  key: null | string,</span><br><span class="line">  mode: TypeOfMode,</span><br><span class="line">) &#123;</span><br><span class="line">  &#x2F;&#x2F; 作为静态数据结构的属性</span><br><span class="line">  this.tag &#x3D; tag;&#x2F;&#x2F; Fiber对应组件的类型 Function&#x2F;Class&#x2F;Host...</span><br><span class="line">  this.key &#x3D; key;&#x2F;&#x2F; key属性</span><br><span class="line">  &#x2F;&#x2F; 大部分情况同type，某些情况不同，比如FunctionComponent使用React.memo包裹</span><br><span class="line">  this.elementType &#x3D; null;</span><br><span class="line">  &#x2F;&#x2F; 对于 FunctionComponent，指函数本身，对于ClassComponent，指class，对于HostComponent，指DOM节点tagName</span><br><span class="line">  this.type &#x3D; null;</span><br><span class="line">  this.stateNode &#x3D; null;&#x2F;&#x2F; Fiber对应的真实DOM节点</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 用于连接其他Fiber节点形成Fiber树</span><br><span class="line">  this.return &#x3D; null;&#x2F;&#x2F; 指向父级Fiber节点</span><br><span class="line">  this.child &#x3D; null;&#x2F;&#x2F; 指向子Fiber节点</span><br><span class="line">  this.sibling &#x3D; null;&#x2F;&#x2F; 指向右边第一个兄弟Fiber节点</span><br><span class="line">  this.index &#x3D; 0;</span><br><span class="line"></span><br><span class="line">  this.ref &#x3D; null;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 作为动态的工作单元的属性</span><br><span class="line">  &#x2F;&#x2F; 保存本次更新造成的状态改变相关信息</span><br><span class="line">  this.pendingProps &#x3D; pendingProps;</span><br><span class="line">  this.memoizedProps &#x3D; null;</span><br><span class="line">  this.updateQueue &#x3D; null;</span><br><span class="line">  this.memoizedState &#x3D; null;</span><br><span class="line">  this.dependencies &#x3D; null;</span><br><span class="line"></span><br><span class="line">  this.mode &#x3D; mode;</span><br><span class="line"></span><br><span class="line">&#x2F;&#x2F; 保存本次更新会造成的DOM操作</span><br><span class="line">  this.effectTag &#x3D; NoEffect;</span><br><span class="line">  this.nextEffect &#x3D; null;</span><br><span class="line"></span><br><span class="line">  this.firstEffect &#x3D; null;</span><br><span class="line">  this.lastEffect &#x3D; null;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 调度优先级相关</span><br><span class="line">  this.lanes &#x3D; NoLanes;</span><br><span class="line">  this.childLanes &#x3D; NoLanes;</span><br><span class="line"></span><br><span class="line">  &#x2F;&#x2F; 指向该fiber在另一次更新时对应的fiber</span><br><span class="line">  this.alternate &#x3D; null;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+<h2 id="Fiber节点的结构"><a href="#Fiber节点的结构" class="headerlink" title="Fiber节点的结构"></a>Fiber节点的结构</h2><pre class="line-numbers language-javascript" data-language="javascript"><code class="language-javascript"><span class="token keyword">function</span> <span class="token function">FiberNode</span><span class="token punctuation">(</span>
+  <span class="token parameter">tag<span class="token operator">:</span> WorkTag<span class="token punctuation">,</span>
+  pendingProps<span class="token operator">:</span> mixed<span class="token punctuation">,</span>
+  key<span class="token operator">:</span> <span class="token keyword">null</span> <span class="token operator">|</span> string<span class="token punctuation">,</span>
+  mode<span class="token operator">:</span> TypeOfMode<span class="token punctuation">,</span></span>
+<span class="token punctuation">)</span> <span class="token punctuation">&#123;</span>
+  <span class="token comment">// 作为静态数据结构的属性</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>tag <span class="token operator">=</span> tag<span class="token punctuation">;</span><span class="token comment">// Fiber对应组件的类型 Function/Class/Host...</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>key <span class="token operator">=</span> key<span class="token punctuation">;</span><span class="token comment">// key属性</span>
+  <span class="token comment">// 大部分情况同type，某些情况不同，比如FunctionComponent使用React.memo包裹</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>elementType <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+  <span class="token comment">// 对于 FunctionComponent，指函数本身，对于ClassComponent，指class，对于HostComponent，指DOM节点tagName</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>type <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>stateNode <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span><span class="token comment">// Fiber对应的真实DOM节点</span>
+
+  <span class="token comment">// 用于连接其他Fiber节点形成Fiber树</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>return <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span><span class="token comment">// 指向父级Fiber节点</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>child <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span><span class="token comment">// 指向子Fiber节点</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>sibling <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span><span class="token comment">// 指向右边第一个兄弟Fiber节点</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>index <span class="token operator">=</span> <span class="token number">0</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">this</span><span class="token punctuation">.</span>ref <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 作为动态的工作单元的属性</span>
+  <span class="token comment">// 保存本次更新造成的状态改变相关信息</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>pendingProps <span class="token operator">=</span> pendingProps<span class="token punctuation">;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>memoizedProps <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>updateQueue <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>memoizedState <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>dependencies <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">this</span><span class="token punctuation">.</span>mode <span class="token operator">=</span> mode<span class="token punctuation">;</span>
+
+<span class="token comment">// 保存本次更新会造成的DOM操作</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>effectTag <span class="token operator">=</span> NoEffect<span class="token punctuation">;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>nextEffect <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+
+  <span class="token keyword">this</span><span class="token punctuation">.</span>firstEffect <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>lastEffect <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+
+  <span class="token comment">// 调度优先级相关</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>lanes <span class="token operator">=</span> NoLanes<span class="token punctuation">;</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>childLanes <span class="token operator">=</span> NoLanes<span class="token punctuation">;</span>
+
+  <span class="token comment">// 指向该fiber在另一次更新时对应的fiber</span>
+  <span class="token keyword">this</span><span class="token punctuation">.</span>alternate <span class="token operator">=</span> <span class="token keyword">null</span><span class="token punctuation">;</span>
+<span class="token punctuation">&#125;</span><span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
 
                 
             </div>
