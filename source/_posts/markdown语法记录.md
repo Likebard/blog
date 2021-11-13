@@ -58,6 +58,8 @@ https://github.com - 自动生成！
 > We're living the future so
 > the present is our past.
 
+#换行  
+<br/>标签或者两个空格
 # 分割线:
 如下，三个或者更多的
 
@@ -151,3 +153,5 @@ First Header | Second Header
 ------------ | -------------
 Content from cell 1 | Content from cell 2
 Content in the first column | Content in the second column
+
+[**推荐在Vscode下安装MarkDown** All in One插件](https://www.jdon.com/56553)
